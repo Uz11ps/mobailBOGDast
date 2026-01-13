@@ -23,9 +23,25 @@ class CharityApp extends StatelessWidget {
       title: 'Charity App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.green,
-        scaffoldBackgroundColor: Colors.white,
-        fontFamily: 'SF Pro Display', // standard iOS font, might need to add as asset
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF00C853),
+          primary: const Color(0xFF00C853),
+          secondary: const Color(0xFF00E676),
+          surface: Colors.white,
+        ),
+        scaffoldBackgroundColor: const Color(0xFFF8F9FA),
+        fontFamily: 'SF Pro Display',
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          centerTitle: false,
+          titleTextStyle: TextStyle(
+            color: Colors.black,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       home: const HomeScreen(),
     );

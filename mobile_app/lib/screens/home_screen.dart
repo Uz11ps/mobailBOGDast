@@ -23,42 +23,96 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
-      appBar: AppBar(
-        title: const Text('Сборы', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: false,
-      ),
+      backgroundColor: const Color(0xFFF8F9FA),
       body: Consumer<CollectionProvider>(
         builder: (context, provider, child) {
-          if (provider.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (provider.collections.isEmpty) {
-            return const Center(child: Text('Нет активных сборов'));
-          }
-
-          return RefreshIndicator(
-            onRefresh: provider.fetchCollections,
-            child: ListView.builder(
-              itemCount: provider.collections.length,
-              itemBuilder: (context, index) {
-                final collection = provider.collections[index];
-                return CollectionCard(
-                  collection: collection,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CollectionDetailScreen(collection: collection),
+          return CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              SliverAppBar(
+                floating: true,
+                snap: true,
+                expandedHeight: 120,
+                backgroundColor: Colors.white,
+                flexibleSpace: FlexibleSpaceBar(
+                  centerTitle: false,
+                  titlePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  title: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Привет! 👋',
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                        ),
                       ),
-                    );
-                  },
-                );
-              },
-            ),
+                      const Text(
+                        'Помогаем вместе',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                actions: [
+                  IconButton(
+                    icon: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.person_outline, color: Colors.black),
+                    ),
+                    onPressed: () {},
+                  ),
+                  const SizedBox(width: 8),
+                ],
+              ),
+              if (provider.isLoading)
+                const SliverFillRemaining(
+                  child: Center(child: CircularProgressIndicator()),
+                )
+              else if (provider.collections.isEmpty)
+                const SliverFillRemaining(
+                  child: Center(child: Text('Нет активных сборов')),
+                )
+              else
+                SliverPadding(
+                  padding: const EdgeInsets.only(top: 12, bottom: 40),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final collection = provider.collections[index];
+                        return CollectionCard(
+                          collection: collection,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                transitionDuration: const Duration(milliseconds: 500),
+                                pageBuilder: (context, animation, secondaryAnimation) => 
+                                  CollectionDetailScreen(collection: collection),
+                                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                  return FadeTransition(opacity: animation, child: child);
+                                },
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      childCount: provider.collections.length,
+                    ),
+                  ),
+                ),
+            ],
           );
         },
       ),
