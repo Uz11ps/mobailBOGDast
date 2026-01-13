@@ -7,6 +7,15 @@ export class AdminController {
   private collectionService = new CollectionService();
   private transactionRepository = AppDataSource.getRepository(Transaction);
 
+  login = async (req: Request, res: Response) => {
+    const { login, password } = req.body;
+    if (login === "123" && password === "123") {
+      res.json({ token: "admin-secret-token", message: "Success" });
+    } else {
+      res.status(401).json({ message: "Invalid credentials" });
+    }
+  };
+
   getDashboardStats = async (req: Request, res: Response) => {
     try {
       const totalRaised = await this.transactionRepository
