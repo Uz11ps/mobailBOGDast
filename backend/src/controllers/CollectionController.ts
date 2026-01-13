@@ -33,5 +33,14 @@ export class CollectionController {
       res.status(500).json({ message: "Error creating collection" });
     }
   };
+
+  update = async (req: Request, res: Response) => {
+    try {
+      const collection = await this.collectionService.update(req.params.id, req.body);
+      res.json(collection);
+    } catch (error) {
+      res.status(500).json({ message: "Error updating collection" });
+    }
+  };
 }
 

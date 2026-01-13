@@ -21,5 +21,10 @@ export class CollectionService {
     const collection = this.collectionRepository.create(data);
     return await this.collectionRepository.save(collection);
   }
+
+  async update(id: string, data: Partial<Collection>) {
+    await this.collectionRepository.update(id, data);
+    return await this.collectionRepository.findOne({ where: { id } });
+  }
 }
 

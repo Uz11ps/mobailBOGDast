@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель — Управление</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #f4f7f6; font-family: 'Inter', sans-serif; }
+        .sidebar { height: 100vh; background: #1a1d23; color: white; padding: 20px; position: fixed; width: 250px; z-index: 1000; }
+        .main-content { margin-left: 250px; padding: 30px; }
+        .card { border: none; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .nav-link { color: rgba(255,255,255,0.7); margin-bottom: 10px; border-radius: 10px; padding: 12px 15px; display: flex; align-items: center; text-decoration: none; }
+        .nav-link:hover, .nav-link.active { background: #343a40; color: white; }
+        .nav-link i { margin-right: 10px; font-size: 1.2rem; }
+        
+        @media (max-width: 768px) {
+            .sidebar { width: 100%; height: auto; position: relative; padding: 10px; }
+            .main-content { margin-left: 0; padding: 15px; }
+            .nav { flex-direction: row !important; justify-content: space-around; }
+            .nav-link { margin-bottom: 0; padding: 8px; font-size: 0.8rem; flex-direction: column; }
+            .nav-link i { margin-right: 0; margin-bottom: 5px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h4 class="mb-4 px-2">Charity Admin</h4>
+        <nav class="nav flex-column">
+            <a class="nav-link active" href="#"><i class="bi bi-list-stars"></i> Сборы</a>
+            <a class="nav-link" href="#" onclick="logout()"><i class="bi bi-box-arrow-right"></i> Выход</a>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold mb-0">Управление сборами</h2>
+            <button class="btn btn-primary rounded-pill px-4" onclick="openAddModal()">
+                <i class="bi bi-plus-lg me-2"></i> Добавить сбор
+            </button>
+        </div>
+
+        <div class="card p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="px-4 py-3">Заголовок</th>
+                            <th>Цель</th>
+                            <th>Собрано</th>
+                            <th>Статус</th>
+                            <th class="px-4 text-end">Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="collections-list"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Add/Edit -->
+    <div class="modal fade" id="collectionModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow" style="border-radius: 20px;">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold" id="modalTitle">Новый сбор</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="collection-form">
+                        <input type="hidden" id="collection-id">
+                        <div class="mb-3">
+                            <label class="form-label small">Заголовок</label>
+                            <input type="text" id="title" class="form-control border-0 bg-light rounded-3" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small">Описание</label>
+                            <textarea id="description" class="form-control border-0 bg-light rounded-3" rows="3" required></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label class="form-label small">Целевая сумма (₽)</label>
+                                <input type="number" id="goalAmount" class="form-control border-0 bg-light rounded-3" required>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label small">URL изображения</label>
+                                <input type="url" id="imageUrl" class="form-control border-0 bg-light rounded-3">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 py-3 rounded-3 mt-3 fw-bold">Сохранить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = '/api';
+        const modal = new bootstrap.Modal(document.getElementById('collectionModal'));
+        let collections = [];
+
+        async function loadCollections() {
+            const res = await fetch(`${API_URL}/collections`);
+            collections = await res.json();
+            const list = document.getElementById('collections-list');
+            list.innerHTML = collections.map(c => `
+                <tr>
+                    <td class="px-4 fw-bold">${c.title}</td>
+                    <td>${Number(c.goalAmount).toLocaleString()} ₽</td>
+                    <td class="text-success">${Number(c.raisedAmount).toLocaleString()} ₽</td>
+                    <td><span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">${c.status}</span></td>
+                    <td class="px-4 text-end">
+                        <button class="btn btn-sm btn-light rounded-pill me-2" onclick="openEditModal('${c.id}')">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function openAddModal() {
+            document.getElementById('modalTitle').innerText = 'Новый сбор';
+            document.getElementById('collection-form').reset();
+            document.getElementById('collection-id').value = '';
+            modal.show();
+        }
+
+        function openEditModal(id) {
+            const c = collections.find(item => item.id === id);
+            document.getElementById('modalTitle').innerText = 'Редактировать сбор';
+            document.getElementById('collection-id').value = c.id;
+            document.getElementById('title').value = c.title;
+            document.getElementById('description').value = c.description;
+            document.getElementById('goalAmount').value = c.goalAmount;
+            document.getElementById('imageUrl').value = c.imageUrl || '';
+            modal.show();
+        }
+
+        document.getElementById('collection-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('collection-id').value;
+            const data = {
+                title: document.getElementById('title').value,
+                description: document.getElementById('description').value,
+                goalAmount: Number(document.getElementById('goalAmount').value),
+                imageUrl: document.getElementById('imageUrl').value
+            };
+
+            const url = id ? `${API_URL}/collections/${id}` : `${API_URL}/admin/collections`;
+            const method = id ? 'PUT' : 'POST';
+
+            await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            modal.hide();
+            loadCollections();
+        };
+
+        function logout() {
+            localStorage.removeItem('admin_token');
+            window.location.href = 'index.html';
+        }
+
+        loadCollections();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
