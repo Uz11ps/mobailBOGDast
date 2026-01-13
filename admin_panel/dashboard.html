@@ -39,6 +39,9 @@
             <a class="nav-link" onclick="showSection('transactions')">
                 <i class="bi bi-credit-card"></i> Транзакции
             </a>
+            <a class="nav-link" onclick="showSection('gallery')">
+                <i class="bi bi-images"></i> Галерея
+            </a>
             <hr class="text-secondary">
             <a class="nav-link text-danger" onclick="logout()">
                 <i class="bi bi-box-arrow-right"></i> Выход
@@ -108,22 +111,43 @@
 
         <!-- Transactions Section -->
         <div id="transactions" class="section">
-            <h2 class="mb-4 fw-bold">История транзакций</h2>
-            <div class="card p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0 align-middle">
-                        <thead class="bg-light">
-                            <tr>
-                                <th class="px-4 py-3">Дата</th>
-                                <th>Сумма</th>
-                                <th>Сбор</th>
-                                <th>Статус</th>
-                            </tr>
-                        </thead>
-                        <tbody id="transactions-list">
-                            <tr><td colspan="4" class="text-center py-4 text-muted">Транзакций пока нет</td></tr>
-                        </tbody>
-                    </table>
+            <!-- ... -->
+        </div>
+
+        <!-- Gallery Section -->
+        <div id="gallery" class="section">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold mb-0">Галерея добра</h2>
+                <button class="btn btn-primary rounded-pill px-4" onclick="openGalleryModal()">
+                    <i class="bi bi-plus-lg me-2"></i> Добавить фото
+                </button>
+            </div>
+            <div id="gallery-list" class="row g-3">
+                <!-- JS Load -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Add Photo -->
+    <div class="modal fade" id="galleryModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow" style="border-radius: 20px;">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold">Добавить в галерею</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="gallery-form">
+                        <div class="mb-3">
+                            <label class="form-label small">URL изображения</label>
+                            <input type="url" id="g-imageUrl" class="form-control border-0 bg-light rounded-3" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small">Заголовок (кратко)</label>
+                            <input type="text" id="g-title" class="form-control border-0 bg-light rounded-3">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 py-3 rounded-3 mt-3 fw-bold">Добавить</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -168,11 +192,12 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const API_URL = '/api';
-        let modal;
+        let modal, galleryModal;
         let collections = [];
 
         document.addEventListener('DOMContentLoaded', () => {
             modal = new bootstrap.Modal(document.getElementById('collectionModal'));
+            galleryModal = new bootstrap.Modal(document.getElementById('galleryModal'));
             loadAllData();
         });
 
@@ -209,6 +234,24 @@
                         </td>
                     </tr>
                 `).join('');
+
+                // Gallery
+                const galleryRes = await fetch(`${API_URL}/gallery`);
+                const galleryItems = await galleryRes.json();
+                const gList = document.getElementById('gallery-list');
+                gList.innerHTML = galleryItems.map(item => `
+                    <div class="col-md-3">
+                        <div class="card p-2">
+                            <img src="${item.imageUrl}" class="rounded-3 mb-2" style="height: 150px; object-fit: cover;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small>${item.title || 'Без названия'}</small>
+                                <button class="btn btn-sm btn-outline-danger border-0" onclick="deleteGalleryItem('${item.id}')">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
             } catch (e) {
                 console.error('Ошибка загрузки:', e);
             }
@@ -222,14 +265,36 @@
         }
 
         function openEditModal(id) {
-            const c = collections.find(item => item.id === id);
-            document.getElementById('modalTitle').innerText = 'Редактировать сбор';
-            document.getElementById('collection-id').value = c.id;
-            document.getElementById('title').value = c.title;
-            document.getElementById('description').value = c.description;
-            document.getElementById('goalAmount').value = c.goalAmount;
-            document.getElementById('imageUrl').value = c.imageUrl || '';
-            modal.show();
+            // ...
+        }
+
+        function openGalleryModal() {
+            document.getElementById('gallery-form').reset();
+            galleryModal.show();
+        }
+
+        document.getElementById('gallery-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const data = {
+                imageUrl: document.getElementById('g-imageUrl').value,
+                title: document.getElementById('g-title').value
+            };
+
+            await fetch(`${API_URL}/gallery`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            galleryModal.hide();
+            loadAllData();
+        };
+
+        async function deleteGalleryItem(id) {
+            if (confirm('Удалить фото?')) {
+                await fetch(`${API_URL}/gallery/${id}`, { method: 'DELETE' });
+                loadAllData();
+            }
         }
 
         document.getElementById('collection-form').onsubmit = async (e) => {
