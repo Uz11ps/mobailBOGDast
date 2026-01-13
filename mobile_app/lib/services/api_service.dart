@@ -5,7 +5,8 @@ import '../models/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-  static const String baseUrl = 'http://89.104.74.111/api'; // Используем IP сервера или домен
+  // Используем домен в формате Punycode (новаяжизнь.com)
+  static const String baseUrl = 'http://xn--80adfb7ajbc4as6e.com/api'; 
 
   Future<String?> _getToken() async {
     final prefs = await SharedPreferences.getInstance();
