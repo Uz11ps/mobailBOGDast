@@ -51,7 +51,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               const SizedBox(height: 8),
               Center(
                 child: Text(
-                  'Ваша помощь очень важна для нас',
+                  'Ваш вклад бесценен 🙏',
                   style: TextStyle(color: Colors.grey[600], fontSize: 14),
                 ),
               ),

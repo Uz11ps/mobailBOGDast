@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'providers/collection_provider.dart';
 import 'screens/home_screen.dart';
 
@@ -27,19 +28,22 @@ class CharityApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xFF00C853),
           primary: const Color(0xFF00C853),
-          secondary: const Color(0xFF00E676),
+          secondary: const Color(0xFFFFD600), // Joyful Yellow
+          tertiary: const Color(0xFF2979FF), // Trust Blue
           surface: Colors.white,
         ),
         scaffoldBackgroundColor: const Color(0xFFF8F9FA),
-        fontFamily: 'SF Pro Display',
-        appBarTheme: const AppBarTheme(
+        textTheme: GoogleFonts.nunitoTextTheme(
+          Theme.of(context).textTheme,
+        ),
+        appBarTheme: AppBarTheme(
           backgroundColor: Colors.white,
           elevation: 0,
           centerTitle: false,
-          titleTextStyle: TextStyle(
+          titleTextStyle: GoogleFonts.nunito(
             color: Colors.black,
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
+            fontSize: 24,
+            fontWeight: FontWeight.w900,
           ),
         ),
       ),
