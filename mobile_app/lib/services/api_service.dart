@@ -5,8 +5,8 @@ import '../models/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-  // Используем домен в формате Punycode (новаяжизнь.com)
-  static const String baseUrl = 'http://xn--80adfb7ajbc4as6e.com/api'; 
+  // Используем работающий HTTPS домен (новая-жизнь.com)
+  static const String baseUrl = 'https://xn--80adnee0afc6kza.com/api'; 
 
   Future<String?> _getToken() async {
     final prefs = await SharedPreferences.getInstance();
