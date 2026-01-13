@@ -8,12 +8,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
         body { background-color: #f4f7f6; font-family: 'Inter', sans-serif; }
-        .sidebar { height: 100vh; background: #1a1d23; color: white; padding: 20px; position: fixed; width: 250px; z-index: 1000; }
-        .main-content { margin-left: 250px; padding: 30px; }
+        .sidebar { height: 100vh; background: #1a1d23; color: white; padding: 20px; position: fixed; width: 250px; z-index: 1000; transition: all 0.3s; }
+        .main-content { margin-left: 250px; padding: 30px; transition: all 0.3s; }
         .card { border: none; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        .nav-link { color: rgba(255,255,255,0.7); margin-bottom: 10px; border-radius: 10px; padding: 12px 15px; display: flex; align-items: center; text-decoration: none; }
+        .nav-link { color: rgba(255,255,255,0.7); margin-bottom: 10px; border-radius: 10px; padding: 12px 15px; display: flex; align-items: center; text-decoration: none; cursor: pointer; }
         .nav-link:hover, .nav-link.active { background: #343a40; color: white; }
         .nav-link i { margin-right: 10px; font-size: 1.2rem; }
+        .section { display: none; }
+        .section.active { display: block; }
         
         @media (max-width: 768px) {
             .sidebar { width: 100%; height: auto; position: relative; padding: 10px; }
@@ -28,33 +30,101 @@
     <div class="sidebar">
         <h4 class="mb-4 px-2">Charity Admin</h4>
         <nav class="nav flex-column">
-            <a class="nav-link active" href="#"><i class="bi bi-list-stars"></i> Сборы</a>
-            <a class="nav-link" href="#" onclick="logout()"><i class="bi bi-box-arrow-right"></i> Выход</a>
+            <a class="nav-link active" onclick="showSection('dashboard')">
+                <i class="bi bi-speedometer2"></i> Дашборд
+            </a>
+            <a class="nav-link" onclick="showSection('collections')">
+                <i class="bi bi-list-stars"></i> Сборы
+            </a>
+            <a class="nav-link" onclick="showSection('transactions')">
+                <i class="bi bi-credit-card"></i> Транзакции
+            </a>
+            <hr class="text-secondary">
+            <a class="nav-link text-danger" onclick="logout()">
+                <i class="bi bi-box-arrow-right"></i> Выход
+            </a>
         </nav>
     </div>
 
     <div class="main-content">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="fw-bold mb-0">Управление сборами</h2>
-            <button class="btn btn-primary rounded-pill px-4" onclick="openAddModal()">
-                <i class="bi bi-plus-lg me-2"></i> Добавить сбор
-            </button>
+        <!-- Dashboard Section -->
+        <div id="dashboard" class="section active">
+            <h2 class="mb-4 fw-bold">Обзор системы</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card p-4">
+                        <div class="d-flex align-items-center">
+                            <div class="bg-success bg-opacity-10 p-3 rounded-circle me-3">
+                                <i class="bi bi-wallet2 text-success fs-3"></i>
+                            </div>
+                            <div>
+                                <h6 class="text-muted mb-1">Всего собрано</h6>
+                                <h3 id="total-raised" class="mb-0 fw-bold">0 ₽</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card p-4">
+                        <div class="d-flex align-items-center">
+                            <div class="bg-primary bg-opacity-10 p-3 rounded-circle me-3">
+                                <i class="bi bi-flag text-primary fs-3"></i>
+                            </div>
+                            <div>
+                                <h6 class="text-muted mb-1">Активных сборов</h6>
+                                <h3 id="active-count" class="mb-0 fw-bold">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="card p-0">
-            <div class="table-responsive">
-                <table class="table table-hover mb-0 align-middle">
-                    <thead class="bg-light">
-                        <tr>
-                            <th class="px-4 py-3">Заголовок</th>
-                            <th>Цель</th>
-                            <th>Собрано</th>
-                            <th>Статус</th>
-                            <th class="px-4 text-end">Действия</th>
-                        </tr>
-                    </thead>
-                    <tbody id="collections-list"></tbody>
-                </table>
+        <!-- Collections Section -->
+        <div id="collections" class="section">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold mb-0">Управление сборами</h2>
+                <button class="btn btn-primary rounded-pill px-4" onclick="openAddModal()">
+                    <i class="bi bi-plus-lg me-2"></i> Добавить сбор
+                </button>
+            </div>
+            <div class="card p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="px-4 py-3">Заголовок</th>
+                                <th>Цель</th>
+                                <th>Собрано</th>
+                                <th>Статус</th>
+                                <th class="px-4 text-end">Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="collections-list"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transactions Section -->
+        <div id="transactions" class="section">
+            <h2 class="mb-4 fw-bold">История транзакций</h2>
+            <div class="card p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="px-4 py-3">Дата</th>
+                                <th>Сумма</th>
+                                <th>Сбор</th>
+                                <th>Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactions-list">
+                            <tr><td colspan="4" class="text-center py-4 text-muted">Транзакций пока нет</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -101,29 +171,47 @@
         let modal;
         let collections = [];
 
-        // Инициализируем модал после загрузки Bootstrap
         document.addEventListener('DOMContentLoaded', () => {
             modal = new bootstrap.Modal(document.getElementById('collectionModal'));
-            loadCollections();
+            loadAllData();
         });
 
-        async function loadCollections() {
-            const res = await fetch(`${API_URL}/collections`);
-            collections = await res.json();
-            const list = document.getElementById('collections-list');
-            list.innerHTML = collections.map(c => `
-                <tr>
-                    <td class="px-4 fw-bold">${c.title}</td>
-                    <td>${Number(c.goalAmount).toLocaleString()} ₽</td>
-                    <td class="text-success">${Number(c.raisedAmount).toLocaleString()} ₽</td>
-                    <td><span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">${c.status}</span></td>
-                    <td class="px-4 text-end">
-                        <button class="btn btn-sm btn-light rounded-pill me-2" onclick="openEditModal('${c.id}')">
-                            <i class="bi bi-pencil"></i>
-                        </button>
-                    </td>
-                </tr>
-            `).join('');
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            
+            document.getElementById(id).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        async function loadAllData() {
+            try {
+                // Stats
+                const statsRes = await fetch(`${API_URL}/admin/stats`);
+                const stats = await statsRes.json();
+                document.getElementById('total-raised').innerText = `${Number(stats.totalRaised).toLocaleString()} ₽`;
+                document.getElementById('active-count').innerText = stats.activeCollections;
+
+                // Collections
+                const colRes = await fetch(`${API_URL}/collections`);
+                collections = await colRes.json();
+                const list = document.getElementById('collections-list');
+                list.innerHTML = collections.map(c => `
+                    <tr>
+                        <td class="px-4 fw-bold">${c.title}</td>
+                        <td>${Number(c.goalAmount).toLocaleString()} ₽</td>
+                        <td class="text-success fw-bold">${Number(c.raisedAmount).toLocaleString()} ₽</td>
+                        <td><span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">${c.status}</span></td>
+                        <td class="px-4 text-end">
+                            <button class="btn btn-sm btn-light rounded-pill me-2" onclick="openEditModal('${c.id}')">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (e) {
+                console.error('Ошибка загрузки:', e);
+            }
         }
 
         function openAddModal() {
@@ -155,25 +243,20 @@
             };
 
             const url = id ? `${API_URL}/collections/${id}` : `${API_URL}/admin/collections`;
-            const method = id ? 'PUT' : 'POST';
-
             await fetch(url, {
-                method: method,
+                method: id ? 'PUT' : 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
 
             modal.hide();
-            loadCollections();
+            loadAllData();
         };
 
         function logout() {
             localStorage.removeItem('admin_token');
             window.location.href = 'index.html';
         }
-
-        loadCollections();
     </script>
 </body>
 </html>
-
