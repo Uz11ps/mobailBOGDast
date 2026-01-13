@@ -4,21 +4,21 @@ import { Transaction } from "./Transaction";
 @Entity()
 export class User {
   @PrimaryGeneratedColumn("uuid")
-  id: string;
+  id!: string;
 
   @Column({ unique: true })
-  phone: string;
+  phone!: string;
 
   @Column({ nullable: true })
-  name: string;
+  name!: string;
 
   @Column({ nullable: true })
-  email: string;
+  email!: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @OneToMany(() => Transaction, (transaction) => transaction.user)
-  transactions: Transaction[];
+  transactions!: Transaction[];
 }
 

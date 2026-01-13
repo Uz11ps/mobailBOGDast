@@ -15,7 +15,7 @@ export class CollectionController {
 
   getOne = async (req: Request, res: Response) => {
     try {
-      const collection = await this.collectionService.getById(req.params.id);
+      const collection = await this.collectionService.getById(req.params.id as string);
       if (!collection) {
         return res.status(404).json({ message: "Collection not found" });
       }

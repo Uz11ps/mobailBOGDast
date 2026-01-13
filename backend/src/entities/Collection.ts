@@ -8,31 +8,31 @@ export enum CollectionStatus {
 @Entity()
 export class Collection {
   @PrimaryGeneratedColumn("uuid")
-  id: string;
+  id!: string;
 
   @Column()
-  title: string;
+  title!: string;
 
   @Column("text")
-  description: string;
+  description!: string;
 
   @Column("decimal", { precision: 12, scale: 2 })
-  goalAmount: number;
+  goalAmount!: number;
 
   @Column("decimal", { precision: 12, scale: 2, default: 0 })
-  raisedAmount: number;
+  raisedAmount!: number;
 
   @Column({ nullable: true })
-  imageUrl: string;
+  imageUrl!: string;
 
   @Column({
     type: "enum",
     enum: CollectionStatus,
     default: CollectionStatus.ACTIVE,
   })
-  status: CollectionStatus;
+  status!: CollectionStatus;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 }
 
