@@ -30,22 +30,13 @@
     <div class="sidebar">
         <h4 class="mb-4 px-2">Charity Admin</h4>
         <nav class="nav flex-column">
-            <a class="nav-link active" onclick="showSection('dashboard')">
-                <i class="bi bi-speedometer2"></i> Дашборд
-            </a>
-            <a class="nav-link" onclick="showSection('collections')">
-                <i class="bi bi-list-stars"></i> Сборы
-            </a>
-            <a class="nav-link" onclick="showSection('transactions')">
-                <i class="bi bi-credit-card"></i> Транзакции
-            </a>
-            <a class="nav-link" onclick="showSection('gallery')">
-                <i class="bi bi-images"></i> Галерея
-            </a>
+            <a class="nav-link active" onclick="showSection('dashboard')"><i class="bi bi-speedometer2"></i> Дашборд</a>
+            <a class="nav-link" onclick="showSection('collections')"><i class="bi bi-list-stars"></i> Проекты</a>
+            <a class="nav-link" onclick="showSection('gallery')"><i class="bi bi-images"></i> Галерея добра</a>
+            <a class="nav-link" onclick="showSection('documents')"><i class="bi bi-file-earmark-text"></i> Документы</a>
+            <a class="nav-link" onclick="showSection('foundation')"><i class="bi bi-info-circle"></i> О фонде</a>
             <hr class="text-secondary">
-            <a class="nav-link text-danger" onclick="logout()">
-                <i class="bi bi-box-arrow-right"></i> Выход
-            </a>
+            <a class="nav-link text-danger" onclick="logout()"><i class="bi bi-box-arrow-right"></i> Выход</a>
         </nav>
     </div>
 
@@ -54,274 +45,194 @@
         <div id="dashboard" class="section active">
             <h2 class="mb-4 fw-bold">Обзор системы</h2>
             <div class="row">
-                <div class="col-md-4">
-                    <div class="card p-4">
-                        <div class="d-flex align-items-center">
-                            <div class="bg-success bg-opacity-10 p-3 rounded-circle me-3">
-                                <i class="bi bi-wallet2 text-success fs-3"></i>
-                            </div>
-                            <div>
-                                <h6 class="text-muted mb-1">Всего собрано</h6>
-                                <h3 id="total-raised" class="mb-0 fw-bold">0 ₽</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card p-4">
-                        <div class="d-flex align-items-center">
-                            <div class="bg-primary bg-opacity-10 p-3 rounded-circle me-3">
-                                <i class="bi bi-flag text-primary fs-3"></i>
-                            </div>
-                            <div>
-                                <h6 class="text-muted mb-1">Активных сборов</h6>
-                                <h3 id="active-count" class="mb-0 fw-bold">0</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div class="col-md-4"><div class="card p-4"><h6 class="text-muted mb-1">Всего собрано</h6><h3 id="total-raised" class="mb-0 fw-bold">0 ₽</h3></div></div>
+                <div class="col-md-4"><div class="card p-4"><h6 class="text-muted mb-1">Активных сборов</h6><h3 id="active-count" class="mb-0 fw-bold">0</h3></div></div>
             </div>
         </div>
 
         <!-- Collections Section -->
         <div id="collections" class="section">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="fw-bold mb-0">Управление сборами</h2>
-                <button class="btn btn-primary rounded-pill px-4" onclick="openAddModal()">
-                    <i class="bi bi-plus-lg me-2"></i> Добавить сбор
-                </button>
+                <h2 class="fw-bold mb-0">Управление проектами</h2>
+                <button class="btn btn-primary rounded-pill px-4" onclick="openAddModal()"><i class="bi bi-plus-lg me-2"></i> Новый проект</button>
             </div>
             <div class="card p-0">
                 <div class="table-responsive">
                     <table class="table table-hover mb-0 align-middle">
-                        <thead class="bg-light">
-                            <tr>
-                                <th class="px-4 py-3">Заголовок</th>
-                                <th>Цель</th>
-                                <th>Собрано</th>
-                                <th>Статус</th>
-                                <th class="px-4 text-end">Действия</th>
-                            </tr>
-                        </thead>
+                        <thead><tr class="bg-light"><th class="px-4 py-3">Проект</th><th>Категория</th><th>Цель</th><th>Собрано</th><th class="text-end px-4">Действия</th></tr></thead>
                         <tbody id="collections-list"></tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <!-- Transactions Section -->
-        <div id="transactions" class="section">
-            <!-- ... -->
-        </div>
-
         <!-- Gallery Section -->
         <div id="gallery" class="section">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="fw-bold mb-0">Галерея добра</h2>
-                <button class="btn btn-primary rounded-pill px-4" onclick="openGalleryModal()">
-                    <i class="bi bi-plus-lg me-2"></i> Добавить фото
-                </button>
+                <button class="btn btn-primary rounded-pill px-4" onclick="openGalleryModal()"><i class="bi bi-plus-lg me-2"></i> Добавить фото</button>
             </div>
-            <div id="gallery-list" class="row g-3">
-                <!-- JS Load -->
+            <div id="gallery-list" class="row g-3"></div>
+        </div>
+
+        <!-- Documents Section -->
+        <div id="documents" class="section">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold mb-0">Документация</h2>
+                <button class="btn btn-primary rounded-pill px-4" onclick="openDocModal()"><i class="bi bi-file-plus me-2"></i> Добавить документ</button>
+            </div>
+            <div class="card p-0"><div class="table-responsive"><table class="table table-hover mb-0"><thead><tr class="bg-light"><th class="px-4">Название</th><th>Категория</th><th class="text-end px-4">Удалить</th></tr></thead><tbody id="docs-list"></tbody></table></div></div>
+        </div>
+
+        <!-- Foundation Section -->
+        <div id="foundation" class="section">
+            <h2 class="mb-4 fw-bold">О самом фонде</h2>
+            <div class="card p-4">
+                <form id="foundation-form">
+                    <div class="mb-3"><label class="form-label">Описание фонда</label><textarea id="aboutText" class="form-control" rows="4"></textarea></div>
+                    <div class="mb-3"><label class="form-label">Связь с Францией</label><textarea id="frenchConnectionText" class="form-control" rows="2"></textarea></div>
+                    <button type="submit" class="btn btn-success px-5 fw-bold">Сохранить изменения</button>
+                </form>
             </div>
         </div>
     </div>
 
-    <!-- Modal for Add Photo -->
-    <div class="modal fade" id="galleryModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow" style="border-radius: 20px;">
-                <div class="modal-header border-0">
-                    <h5 class="modal-title fw-bold">Добавить в галерею</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <form id="gallery-form">
-                        <div class="mb-3">
-                            <label class="form-label small">URL изображения</label>
-                            <input type="url" id="g-imageUrl" class="form-control border-0 bg-light rounded-3" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label small">Заголовок (кратко)</label>
-                            <input type="text" id="g-title" class="form-control border-0 bg-light rounded-3">
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100 py-3 rounded-3 mt-3 fw-bold">Добавить</button>
-                    </form>
-                </div>
+    <!-- Collection Modal -->
+    <div class="modal fade" id="collectionModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0 rounded-4 shadow"><div class="modal-header border-0"><h5 class="fw-bold" id="modalTitle">Проект</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body p-4">
+        <form id="collection-form"><input type="hidden" id="collection-id">
+            <div class="mb-3"><label class="small fw-bold">Заголовок</label><input type="text" id="title" class="form-control" required></div>
+            <div class="mb-3"><label class="small fw-bold">Описание</label><textarea id="description" class="form-control" rows="3" required></textarea></div>
+            <div class="row">
+                <div class="col-6 mb-3"><label class="small fw-bold">Цель (₽)</label><input type="number" id="goalAmount" class="form-control" required></div>
+                <div class="col-6 mb-3"><label class="small fw-bold">Категория</label><select id="category" class="form-control"><option value="Школы">Школы</option><option value="Мечети">Мечети</option><option value="Питание">Питание</option></select></div>
             </div>
-        </div>
-    </div>
+            <div class="mb-3"><label class="small fw-bold">Ссылка на фото</label><input type="url" id="imageUrl" class="form-control"></div>
+            <button type="submit" class="btn btn-primary w-100 py-3 fw-bold mt-3">Сохранить</button>
+        </form>
+    </div></div></div></div>
 
-    <!-- Modal for Add/Edit -->
-    <div class="modal fade" id="collectionModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow" style="border-radius: 20px;">
-                <div class="modal-header border-0">
-                    <h5 class="modal-title fw-bold" id="modalTitle">Новый сбор</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <form id="collection-form">
-                        <input type="hidden" id="collection-id">
-                        <div class="mb-3">
-                            <label class="form-label small">Заголовок</label>
-                            <input type="text" id="title" class="form-control border-0 bg-light rounded-3" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label small">Описание</label>
-                            <textarea id="description" class="form-control border-0 bg-light rounded-3" rows="3" required></textarea>
-                        </div>
-                        <div class="row">
-                            <div class="col-6 mb-3">
-                                <label class="form-label small">Целевая сумма (₽)</label>
-                                <input type="number" id="goalAmount" class="form-control border-0 bg-light rounded-3" required>
-                            </div>
-                            <div class="col-6 mb-3">
-                                <label class="form-label small">URL изображения</label>
-                                <input type="url" id="imageUrl" class="form-control border-0 bg-light rounded-3">
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100 py-3 rounded-3 mt-3 fw-bold">Сохранить</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Gallery Modal -->
+    <div class="modal fade" id="galleryModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0 rounded-4 shadow"><div class="modal-header border-0"><h5 class="fw-bold">Фото в галерею</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body p-4">
+        <form id="gallery-form">
+            <div class="mb-3"><label class="small fw-bold">URL изображения</label><input type="url" id="g-imageUrl" class="form-control" required></div>
+            <div class="mb-3"><label class="small fw-bold">Регион/Страна</label><input type="text" id="g-country" class="form-control" placeholder="Африка, Азия..."></div>
+            <div class="mb-3"><label class="small fw-bold">Заголовок</label><input type="text" id="g-title" class="form-control"></div>
+            <button type="submit" class="btn btn-primary w-100 py-3 fw-bold mt-3">Добавить</button>
+        </form>
+    </div></div></div></div>
+
+    <!-- Document Modal -->
+    <div class="modal fade" id="docModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0 rounded-4 shadow"><div class="modal-header border-0"><h5 class="fw-bold">Новый документ</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body p-4">
+        <form id="doc-form">
+            <div class="mb-3"><label class="small fw-bold">Название документа</label><input type="text" id="d-title" class="form-control" required></div>
+            <div class="mb-3"><label class="small fw-bold">URL файла (PDF)</label><input type="url" id="d-fileUrl" class="form-control" required></div>
+            <div class="mb-3"><label class="small fw-bold">Категория</label><input type="text" id="d-category" class="form-control" placeholder="Регистрационные, Отчеты..."></div>
+            <button type="submit" class="btn btn-primary w-100 py-3 fw-bold mt-3">Сохранить</button>
+        </form>
+    </div></div></div></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const API_URL = '/api';
-        let modal, galleryModal;
+        let modal, galleryModal, docModal;
         let collections = [];
 
         document.addEventListener('DOMContentLoaded', () => {
             modal = new bootstrap.Modal(document.getElementById('collectionModal'));
             galleryModal = new bootstrap.Modal(document.getElementById('galleryModal'));
+            docModal = new bootstrap.Modal(document.getElementById('docModal'));
             loadAllData();
         });
 
         function showSection(id) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            
             document.getElementById(id).classList.add('active');
             event.currentTarget.classList.add('active');
         }
 
         async function loadAllData() {
-            try {
-                // Stats
-                const statsRes = await fetch(`${API_URL}/admin/stats`);
-                const stats = await statsRes.json();
-                document.getElementById('total-raised').innerText = `${Number(stats.totalRaised).toLocaleString()} ₽`;
-                document.getElementById('active-count').innerText = stats.activeCollections;
+            // Stats
+            const stats = await (await fetch(`${API_URL}/admin/stats`)).json();
+            document.getElementById('total-raised').innerText = `${Number(stats.totalRaised).toLocaleString()} ₽`;
+            document.getElementById('active-count').innerText = stats.activeCollections;
 
-                // Collections
-                const colRes = await fetch(`${API_URL}/collections`);
-                collections = await colRes.json();
-                const list = document.getElementById('collections-list');
-                list.innerHTML = collections.map(c => `
-                    <tr>
-                        <td class="px-4 fw-bold">${c.title}</td>
-                        <td>${Number(c.goalAmount).toLocaleString()} ₽</td>
-                        <td class="text-success fw-bold">${Number(c.raisedAmount).toLocaleString()} ₽</td>
-                        <td><span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">${c.status}</span></td>
-                        <td class="px-4 text-end">
-                            <button class="btn btn-sm btn-light rounded-pill me-2" onclick="openEditModal('${c.id}')">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
+            // Collections
+            collections = await (await fetch(`${API_URL}/collections`)).json();
+            document.getElementById('collections-list').innerHTML = collections.map(c => `
+                <tr><td class="px-4"><b>${c.title}</b></td><td>${c.category || '-'}</td><td>${Number(c.goalAmount).toLocaleString()} ₽</td><td class="text-success">${Number(c.raisedAmount).toLocaleString()} ₽</td><td class="text-end px-4"><button class="btn btn-sm btn-light" onclick="openEditModal('${c.id}')"><i class="bi bi-pencil"></i></button></td></tr>
+            `).join('');
 
-                // Gallery
-                const galleryRes = await fetch(`${API_URL}/gallery`);
-                const galleryItems = await galleryRes.json();
-                const gList = document.getElementById('gallery-list');
-                gList.innerHTML = galleryItems.map(item => `
-                    <div class="col-md-3">
-                        <div class="card p-2">
-                            <img src="${item.imageUrl}" class="rounded-3 mb-2" style="height: 150px; object-fit: cover;">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <small>${item.title || 'Без названия'}</small>
-                                <button class="btn btn-sm btn-outline-danger border-0" onclick="deleteGalleryItem('${item.id}')">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-            } catch (e) {
-                console.error('Ошибка загрузки:', e);
-            }
+            // Gallery
+            const gallery = await (await fetch(`${API_URL}/gallery`)).json();
+            document.getElementById('gallery-list').innerHTML = gallery.map(item => `
+                <div class="col-md-3"><div class="card p-2"><img src="${item.imageUrl}" class="rounded-3 mb-2" style="height:150px;object-fit:cover;"><div class="d-flex justify-content-between"><span>${item.country || ''}</span><button class="btn btn-sm text-danger" onclick="deleteItem('gallery', '${item.id}')"><i class="bi bi-trash"></i></button></div></div></div>
+            `).join('');
+
+            // Documents
+            const docs = await (await fetch(`${API_URL}/documents`)).json();
+            document.getElementById('docs-list').innerHTML = docs.map(d => `
+                <tr><td class="px-4">${d.title}</td><td>${d.category || '-'}</td><td class="text-end px-4"><button class="btn btn-sm text-danger" onclick="deleteItem('documents', '${d.id}')"><i class="bi bi-trash"></i></button></td></tr>
+            `).join('');
+
+            // Foundation Info
+            const info = await (await fetch(`${API_URL}/foundation`)).json();
+            document.getElementById('aboutText').value = info.aboutText;
+            document.getElementById('frenchConnectionText').value = info.frenchConnectionText;
         }
 
-        function openAddModal() {
-            document.getElementById('modalTitle').innerText = 'Новый сбор';
-            document.getElementById('collection-form').reset();
-            document.getElementById('collection-id').value = '';
-            modal.show();
-        }
-
-        function openEditModal(id) {
-            // ...
-        }
-
-        function openGalleryModal() {
-            document.getElementById('gallery-form').reset();
-            galleryModal.show();
-        }
-
-        document.getElementById('gallery-form').onsubmit = async (e) => {
-            e.preventDefault();
-            const data = {
-                imageUrl: document.getElementById('g-imageUrl').value,
-                title: document.getElementById('g-title').value
-            };
-
-            await fetch(`${API_URL}/gallery`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
-            galleryModal.hide();
-            loadAllData();
-        };
-
-        async function deleteGalleryItem(id) {
-            if (confirm('Удалить фото?')) {
-                await fetch(`${API_URL}/gallery/${id}`, { method: 'DELETE' });
+        async function deleteItem(route, id) {
+            if (confirm('Удалить?')) {
+                await fetch(`${API_URL}/${route}/${id}`, { method: 'DELETE' });
                 loadAllData();
             }
+        }
+
+        document.getElementById('foundation-form').onsubmit = async (e) => {
+            e.preventDefault();
+            await fetch(`${API_URL}/foundation`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ aboutText: document.getElementById('aboutText').value, frenchConnectionText: document.getElementById('frenchConnectionText').value })
+            });
+            alert('Сохранено!');
+        };
+
+        function openAddModal() { document.getElementById('collection-form').reset(); document.getElementById('collection-id').value = ''; modal.show(); }
+        function openEditModal(id) {
+            const c = collections.find(i => i.id === id);
+            document.getElementById('collection-id').value = c.id;
+            document.getElementById('title').value = c.title;
+            document.getElementById('description').value = c.description;
+            document.getElementById('goalAmount').value = c.goalAmount;
+            document.getElementById('category').value = c.category || 'Школы';
+            document.getElementById('imageUrl').value = c.imageUrl || '';
+            modal.show();
         }
 
         document.getElementById('collection-form').onsubmit = async (e) => {
             e.preventDefault();
             const id = document.getElementById('collection-id').value;
-            const data = {
-                title: document.getElementById('title').value,
-                description: document.getElementById('description').value,
-                goalAmount: Number(document.getElementById('goalAmount').value),
-                imageUrl: document.getElementById('imageUrl').value
-            };
-
-            const url = id ? `${API_URL}/collections/${id}` : `${API_URL}/admin/collections`;
-            await fetch(url, {
-                method: id ? 'PUT' : 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
-            modal.hide();
-            loadAllData();
+            const data = { title: document.getElementById('title').value, description: document.getElementById('description').value, goalAmount: Number(document.getElementById('goalAmount').value), category: document.getElementById('category').value, imageUrl: document.getElementById('imageUrl').value };
+            await fetch(id ? `${API_URL}/collections/${id}` : `${API_URL}/admin/collections`, { method: id ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+            modal.hide(); loadAllData();
         };
 
-        function logout() {
-            localStorage.removeItem('admin_token');
-            window.location.href = 'index.html';
-        }
+        function openGalleryModal() { galleryModal.show(); }
+        document.getElementById('gallery-form').onsubmit = async (e) => {
+            e.preventDefault();
+            await fetch(`${API_URL}/gallery`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ imageUrl: document.getElementById('g-imageUrl').value, country: document.getElementById('g-country').value, title: document.getElementById('g-title').value }) });
+            galleryModal.hide(); loadAllData();
+        };
+
+        function openDocModal() { docModal.show(); }
+        document.getElementById('doc-form').onsubmit = async (e) => {
+            e.preventDefault();
+            await fetch(`${API_URL}/documents`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: document.getElementById('d-title').value, fileUrl: document.getElementById('d-fileUrl').value, category: document.getElementById('d-category').value }) });
+            docModal.hide(); loadAllData();
+        };
+
+        function logout() { localStorage.removeItem('admin_token'); window.location.href = 'index.html'; }
     </script>
 </body>
 </html>

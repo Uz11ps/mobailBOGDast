@@ -25,6 +25,12 @@ export class Collection {
   @Column({ nullable: true })
   imageUrl!: string;
 
+  @Column({ nullable: true })
+  country!: string;
+
+  @Column({ nullable: true })
+  category!: string; // e.g., "Mosques", "Schools", "Food"
+
   @Column({
     type: "enum",
     enum: CollectionStatus,

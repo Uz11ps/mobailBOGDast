@@ -8,6 +8,8 @@ import authRoutes from "./routes/authRoutes";
 import paymentRoutes from "./routes/paymentRoutes";
 import adminRoutes from "./routes/adminRoutes";
 import galleryRoutes from "./routes/galleryRoutes";
+import documentRoutes from "./routes/documentRoutes";
+import foundationRoutes from "./routes/foundationRoutes";
 
 dotenv.config();
 
@@ -22,6 +24,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/gallery", galleryRoutes);
+app.use("/api/documents", documentRoutes);
+app.use("/api/foundation", foundationRoutes);
 
 app.get("/", (req, res) => {
   res.send("Charity API is running");

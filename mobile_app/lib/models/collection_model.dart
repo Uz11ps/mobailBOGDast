@@ -35,3 +35,6 @@ class CollectionModel {
   double get progress => raisedAmount / goalAmount;
 }
 
+
+
+

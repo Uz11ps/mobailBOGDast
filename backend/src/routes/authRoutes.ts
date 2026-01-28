@@ -10,3 +10,6 @@ router.get("/profile", authMiddleware, controller.getProfile);
 
 export default router;
 
+
+
+
