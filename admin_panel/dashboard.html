@@ -34,6 +34,8 @@
             <a class="nav-link" onclick="showSection('collections')"><i class="bi bi-list-stars"></i> Проекты</a>
             <a class="nav-link" onclick="showSection('gallery')"><i class="bi bi-images"></i> Галерея добра</a>
             <a class="nav-link" onclick="showSection('documents')"><i class="bi bi-file-earmark-text"></i> Документы</a>
+            <a class="nav-link" onclick="showSection('partners')"><i class="bi bi-people"></i> Партнеры</a>
+            <a class="nav-link" onclick="showSection('updates')"><i class="bi bi-megaphone"></i> Новости проектов</a>
             <a class="nav-link" onclick="showSection('foundation')"><i class="bi bi-info-circle"></i> О фонде</a>
             <hr class="text-secondary">
             <a class="nav-link text-danger" onclick="logout()"><i class="bi bi-box-arrow-right"></i> Выход</a>
@@ -95,6 +97,47 @@
                 </form>
             </div>
         </div>
+
+        <!-- Partners Section -->
+        <div id="partners" class="section">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold mb-0">Наши партнеры</h2>
+                <button class="btn btn-primary rounded-pill px-4" onclick="openPartnerModal()"><i class="bi bi-plus-lg me-2"></i> Добавить партнера</button>
+            </div>
+            <div id="partners-list" class="row g-3"></div>
+        </div>
+
+        <!-- Updates Section -->
+        <div id="updates" class="section">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold mb-0">Обновления по проектам</h2>
+                <button class="btn btn-primary rounded-pill px-4" onclick="openUpdateModal()"><i class="bi bi-plus-lg me-2"></i> Новое обновление</button>
+            </div>
+            <div class="card p-0"><div class="table-responsive"><table class="table table-hover mb-0"><thead><tr class="bg-light"><th class="px-4">Проект</th><th>Заголовок</th><th class="text-end px-4">Действие</th></tr></thead><tbody id="updates-list"></tbody></table></div></div>
+        </div>
+    </div>
+
+    <!-- Partner Modal -->
+    <div class="modal fade" id="partnerModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0 rounded-4 shadow"><div class="modal-header border-0"><h5 class="fw-bold">Новый партнер</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body p-4">
+        <form id="partner-form">
+            <div class="mb-3"><label class="small fw-bold">Название</label><input type="text" id="p-name" class="form-control" required></div>
+            <div class="mb-3"><label class="small fw-bold">URL логотипа</label><input type="url" id="p-logoUrl" class="form-control" required></div>
+            <div class="mb-3"><label class="small fw-bold">Сайт партнера</label><input type="url" id="p-websiteUrl" class="form-control"></div>
+            <button type="submit" class="btn btn-primary w-100 py-3 fw-bold mt-3">Сохранить</button>
+        </form>
+    </div></div></div></div>
+
+    <!-- Update Modal -->
+    <div class="modal fade" id="updateModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0 rounded-4 shadow"><div class="modal-header border-0"><h5 class="fw-bold">Новость по проекту</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body p-4">
+        <form id="update-form">
+            <div class="mb-3"><label class="small fw-bold">Выберите проект</label><select id="u-collectionId" class="form-control" required></select></div>
+            <div class="mb-3"><label class="small fw-bold">Заголовок</label><input type="text" id="u-title" class="form-control" required></div>
+            <div class="mb-3"><label class="small fw-bold">Содержание</label><textarea id="u-content" class="form-control" rows="4" required></textarea></div>
+            <div class="mb-3"><label class="small fw-bold">URL фото</label><input type="url" id="u-imageUrl" class="form-control"></div>
+            <div class="mb-3"><label class="small fw-bold">URL видео</label><input type="url" id="u-videoUrl" class="form-control"></div>
+            <button type="submit" class="btn btn-primary w-100 py-3 fw-bold mt-3">Опубликовать</button>
+        </form>
+    </div></div></div></div>
     </div>
 
     <!-- Collection Modal -->
@@ -134,13 +177,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const API_URL = '/api';
-        let modal, galleryModal, docModal;
+        let modal, galleryModal, docModal, partnerModal, updateModal;
         let collections = [];
 
         document.addEventListener('DOMContentLoaded', () => {
             modal = new bootstrap.Modal(document.getElementById('collectionModal'));
             galleryModal = new bootstrap.Modal(document.getElementById('galleryModal'));
             docModal = new bootstrap.Modal(document.getElementById('docModal'));
+            partnerModal = new bootstrap.Modal(document.getElementById('partnerModal'));
+            updateModal = new bootstrap.Modal(document.getElementById('updateModal'));
             loadAllData();
         });
 
@@ -179,6 +224,24 @@
             const info = await (await fetch(`${API_URL}/foundation`)).json();
             document.getElementById('aboutText').value = info.aboutText;
             document.getElementById('frenchConnectionText').value = info.frenchConnectionText;
+
+            // Partners
+            const partners = await (await fetch(`${API_URL}/partners`)).json();
+            document.getElementById('partners-list').innerHTML = partners.map(p => `
+                <div class="col-md-3"><div class="card p-3 text-center"><img src="${p.logoUrl}" class="mb-2 mx-auto" style="height:40px;object-fit:contain;"><h6>${p.name}</h6><button class="btn btn-sm text-danger" onclick="deleteItem('partners', '${p.id}')"><i class="bi bi-trash"></i></button></div></div>
+            `).join('');
+
+            // Updates
+            document.getElementById('u-collectionId').innerHTML = collections.map(c => `<option value="${c.id}">${c.title}</option>`).join('');
+            // Note: We need a special endpoint to get all updates, or fetch per collection. 
+            // For now, let's assume we fetch all updates if we had such endpoint, but we only have per collection.
+            // Let's just show an empty list or fetch for first collection as example.
+            if (collections.length > 0) {
+                const updates = await (await fetch(`${API_URL}/project-updates/collection/${collections[0].id}`)).json();
+                document.getElementById('updates-list').innerHTML = updates.map(u => `
+                    <tr><td class="px-4">${collections[0].title}</td><td>${u.title}</td><td class="text-end px-4"><button class="btn btn-sm text-danger" onclick="deleteItem('project-updates', '${u.id}')"><i class="bi bi-trash"></i></button></td></tr>
+                `).join('');
+            }
         }
 
         async function deleteItem(route, id) {
@@ -230,6 +293,27 @@
             e.preventDefault();
             await fetch(`${API_URL}/documents`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: document.getElementById('d-title').value, fileUrl: document.getElementById('d-fileUrl').value, category: document.getElementById('d-category').value }) });
             docModal.hide(); loadAllData();
+        };
+
+        function openPartnerModal() { partnerModal.show(); }
+        document.getElementById('partner-form').onsubmit = async (e) => {
+            e.preventDefault();
+            await fetch(`${API_URL}/partners`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: document.getElementById('p-name').value, logoUrl: document.getElementById('p-logoUrl').value, websiteUrl: document.getElementById('p-websiteUrl').value }) });
+            partnerModal.hide(); loadAllData();
+        };
+
+        function openUpdateModal() { updateModal.show(); }
+        document.getElementById('update-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const data = { 
+                collection: { id: document.getElementById('u-collectionId').value },
+                title: document.getElementById('u-title').value,
+                content: document.getElementById('u-content').value,
+                imageUrl: document.getElementById('u-imageUrl').value,
+                videoUrl: document.getElementById('u-videoUrl').value
+            };
+            await fetch(`${API_URL}/project-updates`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+            updateModal.hide(); loadAllData();
         };
 
         function logout() { localStorage.removeItem('admin_token'); window.location.href = 'index.html'; }

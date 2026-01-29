@@ -35,15 +35,28 @@ class CharityApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFF8F9FA),
         textTheme: GoogleFonts.nunitoTextTheme(
           Theme.of(context).textTheme,
+        ).copyWith(
+          displayLarge: GoogleFonts.manrope(
+            fontWeight: FontWeight.w800,
+            letterSpacing: -1,
+          ),
+          headlineMedium: GoogleFonts.manrope(
+            fontWeight: FontWeight.w800,
+            letterSpacing: -0.5,
+          ),
+          titleLarge: GoogleFonts.manrope(
+            fontWeight: FontWeight.w700,
+          ),
         ),
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.white,
           elevation: 0,
           centerTitle: false,
-          titleTextStyle: GoogleFonts.nunito(
+          titleTextStyle: GoogleFonts.manrope(
             color: Colors.black,
             fontSize: 24,
             fontWeight: FontWeight.w900,
+            letterSpacing: -0.5,
           ),
         ),
       ),

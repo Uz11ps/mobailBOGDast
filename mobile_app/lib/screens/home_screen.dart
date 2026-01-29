@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String _selectedCategory = 'Все';
-  final List<String> _categories = ['Все', 'Дети', 'Срочно', 'Животные', 'Экология'];
+  final List<String> _categories = ['Все', 'Школы', 'Мечети', 'Питание', 'Срочно'];
 
   @override
   void initState() {
@@ -74,11 +74,60 @@ class _HomeScreenState extends State<HomeScreen> {
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
+                      icon: Icon(Icons.search_rounded, color: Theme.of(context).primaryColor),
+                      onPressed: () {},
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(right: 16),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor.withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: IconButton(
                       icon: Icon(Icons.notifications_none_rounded, color: Theme.of(context).primaryColor),
                       onPressed: () {},
                     ),
                   ),
                 ],
+              ),
+              // Stories Section
+              SliverToBoxAdapter(
+                child: Container(
+                  height: 110,
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    itemCount: 6,
+                    itemBuilder: (context, index) {
+                      final titles = ["Школа в Мали", "Обед в Африке", "Мечеть Гвинея", "Вода Камерун", "Отчет 2026", "Наша команда"];
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 15),
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(3),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(color: Theme.of(context).primaryColor, width: 2.5),
+                              ),
+                              child: CircleAvatar(
+                                radius: 30,
+                                backgroundImage: NetworkImage('https://picsum.photos/200?random=$index'),
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              titles[index],
+                              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ),
               SliverToBoxAdapter(
                 child: Container(

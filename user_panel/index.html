@@ -3,228 +3,437 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Новая Жизнь — Благотворительная платформа</title>
+    <title>Новая Жизнь — Будущее благотворительности</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary-color: #00C853; --secondary-color: #00E676; --text-dark: #1a1d23; }
-        body { font-family: 'Nunito', sans-serif; color: var(--text-dark); background-color: #fff; }
+        :root { 
+            --primary: #00C853; 
+            --primary-dark: #00b349;
+            --secondary: #FFD600; 
+            --dark: #12141d;
+            --gray-light: #f8f9fa;
+            --glass: rgba(255, 255, 255, 0.8);
+        }
         
-        .navbar { background: white; padding: 20px 0; border-bottom: 1px solid #f0f0f0; }
-        .nav-link { font-weight: 700; color: var(--text-dark) !important; margin: 0 15px; }
-        .nav-link:hover { color: var(--primary-color) !important; }
+        body { 
+            font-family: 'Nunito', sans-serif; 
+            color: var(--dark); 
+            background-color: #fff;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .fw-black { font-family: 'Manrope', sans-serif; font-weight: 800; }
+
+        /* Premium Navbar */
+        .navbar { 
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            padding: 20px 0; 
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        .navbar.scrolled { padding: 12px 0; shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .nav-link { font-weight: 700; font-size: 0.95rem; color: var(--dark) !important; margin: 0 12px; position: relative; }
+        .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 0; background: var(--primary); transition: width 0.3s; }
+        .nav-link:hover::after { width: 100%; }
+
+        /* Mega Hero Section */
+        .hero { 
+            padding: 140px 0 100px;
+            background: radial-gradient(circle at top right, rgba(0, 200, 83, 0.05), transparent),
+                        radial-gradient(circle at bottom left, rgba(255, 214, 0, 0.05), transparent);
+        }
+        .hero-title { font-size: 4.5rem; line-height: 1; letter-spacing: -3px; margin-bottom: 30px; }
+        .hero-badge { 
+            display: inline-block; 
+            padding: 8px 20px; 
+            background: rgba(0, 200, 83, 0.1); 
+            color: var(--primary); 
+            border-radius: 100px; 
+            font-weight: 800; 
+            font-size: 0.8rem; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
         
-        .hero-title { font-size: 4rem; font-weight: 900; line-height: 1.1; letter-spacing: -2px; }
-        .hero-highlight { color: var(--primary-color); position: relative; display: inline-block; }
-        .hero-highlight::after { content: ''; position: absolute; bottom: 10px; left: 0; width: 100%; height: 8px; background: rgba(0, 200, 83, 0.2); z-index: -1; }
+        .counter-box {
+            background: var(--dark);
+            color: white;
+            padding: 40px;
+            border-radius: 40px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+        }
+        .counter-box::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, transparent, var(--primary), transparent);
+            animation: rotate 10s linear infinite;
+            opacity: 0.1;
+        }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* Cards Upgrade */
+        .collection-card { 
+            border: none; 
+            border-radius: 35px; 
+            overflow: hidden; 
+            background: #fff;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.03); 
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            height: 100%;
+        }
+        .collection-card:hover { transform: translateY(-15px); box-shadow: 0 40px 80px rgba(0,0,0,0.1); }
+        .card-image-wrapper { position: relative; overflow: hidden; height: 260px; }
+        .collection-img { transition: transform 0.6s; width: 100%; height: 100%; object-fit: cover; }
+        .collection-card:hover .collection-img { transform: scale(1.1); }
         
-        .app-badge { height: 45px; margin-right: 10px; transition: transform 0.2s; }
-        .app-badge:hover { transform: scale(1.05); }
+        .progress-container { background: #f0f0f0; border-radius: 20px; padding: 4px; margin: 20px 0; }
+        .progress { height: 10px; border-radius: 20px; background: #fff; margin: 0; }
+        .progress-bar { 
+            background: linear-gradient(90deg, #00C853, #b2ff59); 
+            box-shadow: 0 0 20px rgba(0, 200, 83, 0.4);
+        }
+
+        .btn-premium {
+            background: var(--dark);
+            color: white;
+            border: none;
+            padding: 18px 35px;
+            border-radius: 22px;
+            font-weight: 800;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-premium:hover { background: var(--primary); color: white; transform: scale(1.02); }
+
+        /* FAQ & Trust */
+        .faq-item { background: var(--gray-light); border-radius: 25px; padding: 25px; margin-bottom: 15px; cursor: pointer; transition: 0.3s; }
+        .faq-item:hover { background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         
-        .section-title { font-weight: 900; font-size: 2.5rem; margin-bottom: 40px; letter-spacing: -1px; }
-        
-        .collection-card { border: none; border-radius: 30px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.05); transition: transform 0.3s; margin-bottom: 30px; }
-        .collection-card:hover { transform: translateY(-10px); }
-        .collection-img { height: 280px; object-fit: cover; width: 100%; }
-        
-        .progress { height: 12px; border-radius: 20px; background: #f0f0f0; margin: 20px 0; }
-        .progress-bar { background: linear-gradient(90deg, var(--primary-color), var(--secondary-color)); }
-        
-        .btn-donate { background: var(--primary-color); color: white; border: none; padding: 15px 30px; border-radius: 20px; font-weight: 800; width: 100%; }
-        .btn-donate:hover { background: #00b349; color: white; }
-        
-        .gallery-item { position: relative; border-radius: 25px; overflow: hidden; aspect-ratio: 1/1; cursor: pointer; }
-        .gallery-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.7)); color: white; opacity: 0; transition: opacity 0.3s; }
-        .gallery-item:hover .gallery-overlay { opacity: 1; }
-        
-        .doc-card { background: #f8f9fa; border-radius: 20px; padding: 20px; display: flex; align-items: center; text-decoration: none; color: inherit; margin-bottom: 15px; }
-        .doc-card:hover { background: #eef2f3; }
-        .doc-icon { font-size: 2rem; color: var(--primary-color); margin-right: 20px; }
-        
-        .country-pill { background: #f0f0f0; padding: 8px 20px; border-radius: 15px; margin-right: 10px; font-weight: 700; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; }
-        .country-pill.active { background: var(--primary-color); color: white; border-color: var(--primary-color); }
+        .partner-logo { filter: grayscale(1); opacity: 0.5; transition: 0.3s; max-height: 40px; margin: 20px; }
+        .partner-logo:hover { filter: grayscale(0); opacity: 1; }
+
+        /* Floating App Promo */
+        .app-promo-banner {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50px;
+            padding: 60px;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar sticky-top">
+    <nav class="navbar navbar-expand-lg sticky-top" id="mainNav">
         <div class="container">
-            <a class="navbar-brand fw-bolder fs-2" href="#"><i class="bi bi-heart-fill text-danger"></i> Новая Жизнь</a>
-            <div class="d-none d-lg-flex align-items-center">
-                <a class="nav-link" href="#projects">Проекты</a>
-                <a class="nav-link" href="#gallery">Галерея добра</a>
-                <a class="nav-link" href="#docs">Документы</a>
-                <a class="nav-link" href="#about">О фонде</a>
-                <button class="btn btn-outline-dark rounded-pill px-4 fw-bold ms-3" data-bs-toggle="modal" data-bs-target="#loginModal">Войти</button>
+            <a class="navbar-brand fw-black fs-2 d-flex align-items-center" href="#">
+                <div class="bg-primary p-2 rounded-3 me-2 text-white"><i class="bi bi-heart-fill"></i></div>
+                НОВАЯ ЖИЗНЬ
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="#projects">Проекты</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#how-it-works">Как это работает</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#gallery">Галерея</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#docs">Отчетность</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">О фонде</a></li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-premium px-4 py-2 fs-6" data-bs-toggle="modal" data-bs-target="#loginModal">Личный кабинет</button>
+                </div>
             </div>
         </div>
     </nav>
 
-    <header class="py-5 mt-4">
+    <header class="hero">
         <div class="container">
-            <div class="row align-items-center">
+            <div class="row align-items-center g-5">
                 <div class="col-lg-7">
-                    <h1 class="hero-title mb-4">НОВАЯ ЖИЗНЬ — <br><span class="hero-highlight">ПОМОГАТЬ ЛЕГКО</span></h1>
-                    <p class="fs-4 text-muted mb-5">Российский партнер французской ассоциации <b>«Nouvelle Vie»</b>. Мы строим школы, мечети и кормим тысячи нуждающихся по всему миру.</p>
+                    <span class="hero-badge">Международная платформа</span>
+                    <h1 class="hero-title">Там, где <span class="text-primary">добро</span> становится <span class="text-success">реальностью</span></h1>
+                    <p class="fs-4 text-muted mb-5 fw-bold" style="max-width: 600px;">Строим школы, мечети и меняем жизни тысяч людей. Официальный партнер французской ассоциации <b>«Nouvelle Vie»</b>.</p>
                     
-                    <div class="mb-5">
-                        <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" class="app-badge" alt="Google Play"></a>
-                        <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" class="app-badge" alt="App Store"></a>
-                    </div>
-                    
-                    <div class="d-flex align-items-center">
-                        <h2 class="fw-black text-success me-3" id="total-raised-main" style="font-size: 3rem;">0 ₽</h2>
-                        <p class="text-muted fw-bold mb-0">вместе мы<br>уже собрали</p>
+                    <div class="d-flex flex-wrap gap-3 mb-5">
+                        <button class="btn btn-premium px-5 py-3" onclick="document.getElementById('projects').scrollIntoView()">Начать помогать <i class="bi bi-arrow-right"></i></button>
+                        <div class="d-flex align-items-center ms-lg-4">
+                            <div class="avatar-group d-flex me-3">
+                                <img src="https://i.pravatar.cc/150?u=1" class="rounded-circle border border-white border-3" width="45" style="margin-right: -15px;">
+                                <img src="https://i.pravatar.cc/150?u=2" class="rounded-circle border border-white border-3" width="45" style="margin-right: -15px;">
+                                <img src="https://i.pravatar.cc/150?u=3" class="rounded-circle border border-white border-3" width="45">
+                            </div>
+                            <span class="small fw-bold text-muted">Присоединились<br>уже 12,400+ человек</span>
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-5 text-center">
-                    <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=600" class="img-fluid rounded-circle shadow-lg" style="border: 15px solid white;" alt="Fund">
+                <div class="col-lg-5">
+                    <div class="counter-box">
+                        <h6 class="text-uppercase fw-black opacity-50 mb-3" style="letter-spacing: 2px;">Собрано всем миром</h6>
+                        <h2 id="total-raised-main" class="display-3 fw-black mb-4">0 ₽</h2>
+                        <div class="d-flex gap-2">
+                            <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" height="40"></a>
+                            <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" height="40"></a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Projects Section -->
+    <!-- Partners Row -->
+    <div class="container pb-5">
+        <div class="d-flex flex-wrap justify-content-center align-items-center">
+            <span class="text-muted fw-bold me-4 mb-3">НАМ ДОВЕРЯЮТ:</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/UNICEF_Logo.svg" class="partner-logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Red_Cross_logo.svg" class="partner-logo" style="max-height: 30px;">
+            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/c3/Nouvelle_Vie_Logo.png/220px-Nouvelle_Vie_Logo.png" class="partner-logo" alt="Nouvelle Vie">
+            <span class="fw-bold opacity-25 mx-4 fs-4">/</span>
+            <span class="text-muted fw-bold mb-3">И еще 15 организаций</span>
+        </div>
+    </div>
+
+    <!-- Active Projects -->
     <section class="py-5 bg-light" id="projects">
-        <div class="container">
-            <h2 class="section-title">Активные проекты</h2>
-            <div id="collections-grid" class="row">
-                <!-- JS Load -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Gallery Section -->
-    <section class="py-5" id="gallery">
-        <div class="container">
+        <div class="container py-5">
             <div class="d-flex justify-content-between align-items-end mb-5">
-                <h2 class="section-title mb-0">Галерея добра</h2>
-                <div class="d-flex" id="country-filters">
-                    <div class="country-pill active" onclick="filterGallery('Все')">Все</div>
-                    <div class="country-pill" onclick="filterGallery('Африка')">Африка</div>
-                    <div class="country-pill" onclick="filterGallery('Азия')">Азия</div>
+                <div>
+                    <span class="text-primary fw-black text-uppercase small" style="letter-spacing: 2px;">Проекты фонда</span>
+                    <h2 class="display-5 fw-black mt-2">Сейчас идет сбор</h2>
+                </div>
+                <div class="d-none d-md-flex gap-2">
+                    <button class="btn btn-outline-dark rounded-circle p-3"><i class="bi bi-arrow-left"></i></button>
+                    <button class="btn btn-dark rounded-circle p-3"><i class="bi bi-arrow-right"></i></button>
                 </div>
             </div>
-            <div id="gallery-grid" class="row g-4">
+            
+            <div id="collections-grid" class="row g-4">
                 <!-- JS Load -->
             </div>
         </div>
     </section>
 
-    <!-- Docs Section -->
-    <section class="py-5 bg-light" id="docs">
-        <div class="container">
-            <h2 class="section-title">Документация</h2>
-            <div class="row" id="docs-list">
-                <!-- JS Load -->
+    <!-- How it Works (Impact Flow) -->
+    <section class="py-5" id="how-it-works">
+        <div class="container py-5">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-black">Путь вашей помощи</h2>
+                <p class="text-muted fs-5">Мы гарантируем прозрачность на каждом этапе</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-3 text-center">
+                    <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 100px; height: 100px;">
+                        <i class="bi bi-search fs-1 text-primary"></i>
+                    </div>
+                    <h4>Выбор цели</h4>
+                    <p class="text-muted">Изучите детальную информацию и документы по каждому сбору.</p>
+                </div>
+                <div class="col-md-3 text-center">
+                    <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 100px; height: 100px;">
+                        <i class="bi bi-credit-card-2-front fs-1 text-warning"></i>
+                    </div>
+                    <h4>Быстрый взнос</h4>
+                    <p class="text-muted">Любая сумма важна. Оплата через СБП, карты или Apple/Google Pay.</p>
+                </div>
+                <div class="col-md-3 text-center">
+                    <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 100px; height: 100px;">
+                        <i class="bi bi-camera-video fs-1 text-info"></i>
+                    </div>
+                    <h4>Отчет в эфире</h4>
+                    <p class="text-muted">Получайте пуш-уведомления с видео-отчетами прямо с мест событий.</p>
+                </div>
+                <div class="col-md-3 text-center">
+                    <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 100px; height: 100px;">
+                        <i class="bi bi-patch-check fs-1 text-success"></i>
+                    </div>
+                    <h4>Результат</h4>
+                    <p class="text-muted">Ваше имя навсегда остается в списке героев проекта.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- About Section -->
-    <section class="py-5" id="about">
-        <div class="container">
+    <!-- App Promo -->
+    <div class="container py-5">
+        <div class="app-promo-banner">
             <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <h2 class="section-title">О самом фонде</h2>
-                    <div id="about-content">
-                        <p class="fs-5 text-muted mb-4" id="foundation-about-text">Загрузка информации...</p>
-                        <h5 class="fw-bold mt-4">Наши задачи:</h5>
-                        <ul class="list-unstyled">
-                            <li class="mb-3 fs-5"><i class="bi bi-check-circle-fill text-success me-2"></i> Строительство образовательных центров</li>
-                            <li class="mb-3 fs-5"><i class="bi bi-check-circle-fill text-success me-2"></i> Обеспечение чистой водой и питанием</li>
-                            <li class="mb-3 fs-5"><i class="bi bi-check-circle-fill text-success me-2"></i> Поддержка медицинских учреждений</li>
-                        </ul>
+                <div class="col-lg-7 p-lg-5">
+                    <h2 class="display-4 fw-black mb-4">Вся мощь добра в одном приложении</h2>
+                    <p class="fs-5 mb-5 opacity-75">Скачайте приложение «Новая Жизнь», чтобы следить за своими пожертвованиями в реальном времени, получать видео-отчеты и настраивать регулярную помощь в один клик.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" height="50"></a>
+                        <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" height="50"></a>
                     </div>
                 </div>
-                <div class="col-lg-6 p-5">
-                    <div class="card border-0 rounded-5 bg-dark text-white p-5 shadow-lg">
-                        <h3 class="fw-black mb-4">Связь с Францией</h3>
-                        <p id="foundation-french-text" class="fs-5 opacity-75">Мы являемся официальным партнером ассоциации «Nouvelle Vie» во Франции, что позволяет нам координировать международную помощь на высшем уровне.</p>
-                    </div>
+                <div class="col-lg-5 text-center d-none d-lg-block">
+                    <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=400" class="img-fluid rounded-5 shadow-lg rotate-3" alt="App Preview">
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="py-5 bg-dark text-white text-center mt-5">
-        <div class="container">
-            <p class="mb-0 opacity-50">&copy; 2026 Благотворительный фонд «Новая Жизнь». Все права защищены.</p>
-        </div>
-    </footer>
-
-    <!-- Login Modal -->
-    <div class="modal fade auth-modal" id="loginModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content p-5 border-0 rounded-5">
-                <div class="text-center mb-4">
-                    <h2 class="fw-black">Вход в профиль</h2>
-                    <p class="text-muted">Для участия в сборах авторизуйтесь</p>
-                </div>
-                <form id="login-form">
-                    <div class="mb-4">
-                        <input type="tel" id="phone" class="form-control form-control-lg bg-light border-0 rounded-4 px-4 py-3" placeholder="+7 (000) 000-00-00" required>
-                    </div>
-                    <button type="submit" class="btn btn-donate shadow-sm">Продолжить</button>
-                </form>
             </div>
         </div>
     </div>
 
+    <!-- Gallery upgrade -->
+    <section class="py-5" id="gallery">
+        <div class="container py-5">
+            <div class="d-flex justify-content-between align-items-center mb-5">
+                <h2 class="display-5 fw-black">Галерея достижений</h2>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-dark rounded-pill active px-4 py-2" onclick="filterGallery('Все')">Все</button>
+                    <button class="btn btn-outline-dark rounded-pill px-4 py-2" onclick="filterGallery('Африка')">Африка</button>
+                    <button class="btn btn-outline-dark rounded-pill px-4 py-2" onclick="filterGallery('Азия')">Азия</button>
+                </div>
+            </div>
+            <div id="gallery-grid" class="row g-3">
+                <!-- JS Load -->
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-5 bg-light">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h2 class="display-5 fw-black text-center mb-5">Частые вопросы</h2>
+                    <div class="faq-item d-flex justify-content-between align-items-center">
+                        <span class="fs-5 fw-bold">Как я узнаю, что деньги дошли?</span>
+                        <i class="bi bi-plus-lg"></i>
+                    </div>
+                    <div class="faq-item d-flex justify-content-between align-items-center">
+                        <span class="fs-5 fw-bold">Можно ли помогать анонимно?</span>
+                        <i class="bi bi-plus-lg"></i>
+                    </div>
+                    <div class="faq-item d-flex justify-content-between align-items-center">
+                        <span class="fs-5 fw-bold">Как работает регулярное пожертвование?</span>
+                        <i class="bi bi-plus-lg"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Premium -->
+    <footer class="bg-dark text-white pt-5 mt-5">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-lg-4">
+                    <h2 class="fw-black text-primary mb-4">НОВАЯ ЖИЗНЬ</h2>
+                    <p class="opacity-50">Мы делаем благотворительность простой, прозрачной и технологичной. Присоединяйтесь к нам, чтобы менять мир вместе.</p>
+                    <div class="d-flex gap-3 fs-4 mt-4">
+                        <a href="#" class="text-white opacity-50"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-white opacity-50"><i class="bi bi-telegram"></i></a>
+                        <a href="#" class="text-white opacity-50"><i class="bi bi-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <h5 class="fw-bold mb-4">Фонд</h5>
+                    <ul class="list-unstyled opacity-50">
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">О нас</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Документы</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Контакты</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2">
+                    <h5 class="fw-bold mb-4">Помощь</h5>
+                    <ul class="list-unstyled opacity-50">
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">FAQ</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Как помочь</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Личный кабинет</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h5 class="fw-bold mb-4">Подпишитесь на новости</h5>
+                    <div class="input-group">
+                        <input type="email" class="form-control bg-dark border-secondary text-white p-3" placeholder="Ваш email">
+                        <button class="btn btn-primary px-4">OK</button>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-5 opacity-10">
+            <div class="d-flex justify-content-between opacity-25 small">
+                <p>&copy; 2026 Благотворительный фонд «Новая Жизнь»</p>
+                <div>
+                    <a href="#" class="text-white me-3">Политика конфиденциальности</a>
+                    <a href="#" class="text-white">Публичная оферта</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals & Scripts -->
     <script>
         const API_URL = '/api';
 
         async function loadAll() {
-            // Stats
-            const stats = await (await fetch(`${API_URL}/admin/stats`)).json();
-            document.getElementById('total-raised-main').innerText = `${Number(stats.totalRaised).toLocaleString()} ₽`;
+            try {
+                // Stats
+                const stats = await (await fetch(`${API_URL}/admin/stats`)).json();
+                animateCounter('total-raised-main', stats.totalRaised);
 
-            // Collections
-            const collections = await (await fetch(`${API_URL}/collections`)).json();
-            const colGrid = document.getElementById('collections-grid');
-            colGrid.innerHTML = collections.map(c => {
-                const progress = Math.min((c.raisedAmount / c.goalAmount) * 100, 100);
-                return `
-                    <div class="col-lg-4">
-                        <div class="collection-card">
-                            <img src="${c.imageUrl || 'https://via.placeholder.com/600x400'}" class="collection-img">
-                            <div class="p-4">
-                                <span class="badge bg-success bg-opacity-10 text-success mb-2 px-3 rounded-pill">${c.category || 'Общий сбор'}</span>
-                                <h4 class="fw-black mb-3">${c.title}</h4>
-                                <div class="progress"><div class="progress-bar" style="width: ${progress}%"></div></div>
-                                <div class="d-flex justify-content-between mb-4 fw-bold">
-                                    <span>${Number(c.raisedAmount).toLocaleString()} ₽</span>
-                                    <span class="text-muted">цель ${Number(c.goalAmount).toLocaleString()} ₽</span>
+                // Collections
+                const collections = await (await fetch(`${API_URL}/collections`)).json();
+                const colGrid = document.getElementById('collections-grid');
+                colGrid.innerHTML = collections.map(c => {
+                    const progress = Math.min((c.raisedAmount / c.goalAmount) * 100, 100);
+                    return `
+                        <div class="col-lg-4">
+                            <div class="collection-card">
+                                <div class="card-image-wrapper">
+                                    <img src="${c.imageUrl || 'https://via.placeholder.com/600x400'}" class="collection-img">
+                                    <div class="position-absolute top-0 end-0 p-3">
+                                        <span class="badge bg-white text-dark rounded-pill fw-black">${c.category || 'Проект'}</span>
+                                    </div>
                                 </div>
-                                <button onclick="donate('${c.id}')" class="btn-donate">ПОМОЧЬ ПРОЕКТУ</button>
+                                <div class="p-4">
+                                    <h4 class="mb-3">${c.title}</h4>
+                                    <p class="text-muted small">${c.description.substring(0, 120)}...</p>
+                                    <div class="progress-container">
+                                        <div class="progress"><div class="progress-bar" style="width: ${progress}%"></div></div>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-4 fw-bold">
+                                        <div>
+                                            <span class="text-muted small d-block">Собрано</span>
+                                            <span class="fs-5">${Number(c.raisedAmount).toLocaleString()} ₽</span>
+                                        </div>
+                                        <div class="text-end">
+                                            <span class="text-muted small d-block">Цель</span>
+                                            <span class="fs-5">${Number(c.goalAmount).toLocaleString()} ₽</span>
+                                        </div>
+                                    </div>
+                                    <button onclick="donate('${c.id}')" class="btn-premium w-100">ПОМОЧЬ ПРОЕКТУ</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                `;
-            }).join('');
+                    `;
+                }).join('');
 
-            // Documents
-            const docs = await (await fetch(`${API_URL}/documents`)).json();
-            const docsList = document.getElementById('docs-list');
-            docsList.innerHTML = docs.map(d => `
-                <div class="col-md-6">
-                    <a href="${d.fileUrl}" class="doc-card shadow-sm" target="_blank">
-                        <i class="bi bi-file-earmark-pdf doc-icon"></i>
-                        <div>
-                            <h6 class="fw-bold mb-1">${d.title}</h6>
-                            <span class="text-muted small">${d.category || 'Документация'}</span>
-                        </div>
-                    </a>
-                </div>
-            `).join('');
+                loadGallery();
+            } catch (e) { console.error(e); }
+        }
 
-            // Gallery
-            loadGallery();
-
-            // Foundation Info
-            const info = await (await fetch(`${API_URL}/foundation`)).json();
-            document.getElementById('foundation-about-text').innerText = info.aboutText;
-            document.getElementById('foundation-french-text').innerText = info.frenchConnectionText;
+        function animateCounter(id, target) {
+            let current = 0;
+            const element = document.getElementById(id);
+            const duration = 2000;
+            const start = performance.now();
+            
+            function update(timestamp) {
+                const elapsed = timestamp - start;
+                const progress = Math.min(elapsed / duration, 1);
+                current = Math.floor(progress * target);
+                element.innerText = `${current.toLocaleString()} ₽`;
+                if (progress < 1) requestAnimationFrame(update);
+            }
+            requestAnimationFrame(update);
         }
 
         async function loadGallery(country = 'Все') {
@@ -234,31 +443,19 @@
             
             const grid = document.getElementById('gallery-grid');
             grid.innerHTML = items.map(item => `
-                <div class="col-6 col-md-4 col-lg-3">
-                    <div class="gallery-item shadow-sm">
+                <div class="col-md-4 col-lg-3">
+                    <div class="collection-card overflow-hidden" style="aspect-ratio: 1/1;">
                         <img src="${item.imageUrl}" class="w-100 h-100 object-fit-cover">
-                        <div class="gallery-overlay">
-                            <h6 class="fw-bold mb-0">${item.title || ''}</h6>
-                            <small>${item.country || ''}</small>
-                        </div>
                     </div>
                 </div>
             `).join('');
         }
 
-        function filterGallery(country) {
-            document.querySelectorAll('.country-pill').forEach(p => p.classList.remove('active'));
-            event.target.classList.add('active');
-            loadGallery(country);
-        }
-
-        function donate(id) {
-            if (!localStorage.getItem('token')) {
-                new bootstrap.Modal('#loginModal').show();
-                return;
-            }
-            window.location.href = `/donate/${id}`;
-        }
+        window.onscroll = function() {
+            const nav = document.getElementById('mainNav');
+            if (window.scrollY > 50) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+        };
 
         loadAll();
     </script>

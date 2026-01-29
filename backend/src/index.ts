@@ -10,6 +10,8 @@ import adminRoutes from "./routes/adminRoutes";
 import galleryRoutes from "./routes/galleryRoutes";
 import documentRoutes from "./routes/documentRoutes";
 import foundationRoutes from "./routes/foundationRoutes";
+import partnerRoutes from "./routes/partnerRoutes";
+import projectUpdateRoutes from "./routes/projectUpdateRoutes";
 
 dotenv.config();
 
@@ -26,6 +28,8 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/gallery", galleryRoutes);
 app.use("/api/documents", documentRoutes);
 app.use("/api/foundation", foundationRoutes);
+app.use("/api/partners", partnerRoutes);
+app.use("/api/project-updates", projectUpdateRoutes);
 
 app.get("/", (req, res) => {
   res.send("Charity API is running");

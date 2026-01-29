@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/collection_model.dart';
 import 'package:intl/intl.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'payment_screen.dart';
 
 class CollectionDetailScreen extends StatelessWidget {
@@ -127,14 +128,15 @@ class CollectionDetailScreen extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(height: 16),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: LinearProgressIndicator(
-                              value: collection.progress,
-                              backgroundColor: Colors.white,
-                              color: Theme.of(context).primaryColor,
-                              minHeight: 12,
-                            ),
+                          LinearPercentIndicator(
+                            lineHeight: 14.0,
+                            percent: collection.progress,
+                            backgroundColor: Colors.white,
+                            progressColor: Theme.of(context).primaryColor,
+                            barRadius: const Radius.circular(10),
+                            animation: true,
+                            animationDuration: 1000,
+                            padding: EdgeInsets.zero,
                           ),
                           const SizedBox(height: 12),
                           Text(
@@ -156,6 +158,39 @@ class CollectionDetailScreen extends StatelessWidget {
                         fontSize: 16,
                         height: 1.7,
                         color: Colors.grey[800],
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+                    const Text(
+                      'Этапы реализации',
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 16),
+                    _buildTimelineStep(context, 'Сбор средств', 'В процессе', true, true),
+                    _buildTimelineStep(context, 'Закупка материалов', 'Ожидание', false, true),
+                    _buildTimelineStep(context, 'Начало работ', 'Ожидание', false, true),
+                    _buildTimelineStep(context, 'Завершение и отчет', 'Ожидание', false, false),
+                    const SizedBox(height: 32),
+                    const Text(
+                      'Калькулятор помощи',
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 16),
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor.withOpacity(0.05),
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(color: Theme.of(context).primaryColor.withOpacity(0.1)),
+                      ),
+                      child: Column(
+                        children: [
+                          _buildImpactItem(Icons.restaurant, '1000 ₽', '15 горячих обедов'),
+                          const Divider(height: 30),
+                          _buildImpactItem(Icons.architecture, '5000 ₽', '50 кирпичей для школы'),
+                          const Divider(height: 30),
+                          _buildImpactItem(Icons.local_drink, '10000 ₽', 'Часть системы водоснабжения'),
+                        ],
                       ),
                     ),
                     const SizedBox(height: 120),
@@ -198,6 +233,62 @@ class CollectionDetailScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildTimelineStep(BuildContext context, String title, String status, bool isActive, bool hasNext) {
+    return Row(
+      children: [
+        Column(
+          children: [
+            Container(
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: isActive ? Theme.of(context).primaryColor : Colors.grey[300],
+                border: Border.all(color: Colors.white, width: 3),
+                boxShadow: isActive ? [BoxShadow(color: Theme.of(context).primaryColor.withOpacity(0.4), blurRadius: 8)] : [],
+              ),
+            ),
+            if (hasNext)
+              Container(
+                width: 2,
+                height: 40,
+                color: isActive ? Theme.of(context).primaryColor : Colors.grey[300],
+              ),
+          ],
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: TextStyle(fontWeight: FontWeight.bold, color: isActive ? Colors.black : Colors.grey)),
+              Text(status, style: TextStyle(fontSize: 12, color: isActive ? Theme.of(context).primaryColor : Colors.grey)),
+              if (hasNext) const SizedBox(height: 25),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildImpactItem(IconData icon, String amount, String result) {
+    return Row(
+      children: [
+        Icon(icon, color: const Color(0xFF00C853)),
+        const SizedBox(width: 15),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(amount, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 18)),
+              Text(result, style: const TextStyle(color: Colors.grey, fontSize: 13)),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
