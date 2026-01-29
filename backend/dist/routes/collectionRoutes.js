@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const CollectionController_1 = require("../controllers/CollectionController");
+const router = (0, express_1.Router)();
+const controller = new CollectionController_1.CollectionController();
+router.get("/", controller.getAll);
+router.get("/:id", controller.getOne);
+router.post("/", controller.create);
+router.put("/:id", controller.update);
+exports.default = router;

@@ -11,7 +11,7 @@ export class DocumentController {
   };
 
   create = async (req: Request, res: Response) => {
-    const doc = this.documentRepository.create(req.body);
+    const doc = this.documentRepository.create(req.body as object);
     await this.documentRepository.save(doc);
     res.status(201).json(doc);
   };

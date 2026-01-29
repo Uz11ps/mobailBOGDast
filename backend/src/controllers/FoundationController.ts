@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { DeepPartial } from "typeorm";
 import { AppDataSource } from "../data-source";
 import { FoundationInfo } from "../entities/FoundationInfo";
 
@@ -26,8 +27,8 @@ export class FoundationController {
       Object.assign(info, req.body);
       await this.foundationRepository.save(info);
     } else {
-      info = this.foundationRepository.create({ ...req.body, id: 1 });
-      await this.foundationRepository.save(info);
+      const newInfo = this.foundationRepository.create({ ...req.body, id: 1 } as DeepPartial<FoundationInfo>);
+      info = await this.foundationRepository.save(newInfo);
     }
     res.json(info);
   };

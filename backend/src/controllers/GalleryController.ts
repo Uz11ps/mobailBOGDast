@@ -11,7 +11,7 @@ export class GalleryController {
   };
 
   create = async (req: Request, res: Response) => {
-    const item = this.galleryRepository.create(req.body);
+    const item = this.galleryRepository.create(req.body as object);
     await this.galleryRepository.save(item);
     res.status(201).json(item);
   };

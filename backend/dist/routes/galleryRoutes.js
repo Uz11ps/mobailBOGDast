@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const GalleryController_1 = require("../controllers/GalleryController");
+const router = (0, express_1.Router)();
+const controller = new GalleryController_1.GalleryController();
+router.get("/", controller.getAll);
+router.post("/", controller.create);
+router.delete("/:id", controller.delete);
+exports.default = router;
