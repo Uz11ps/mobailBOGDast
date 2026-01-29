@@ -127,6 +127,21 @@ class CollectionCard extends StatelessWidget {
                           _buildStatColumn('Цель', currencyFormat.format(collection.goalAmount), false, context),
                         ],
                       ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: onTap,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).primaryColor,
+                          foregroundColor: Colors.white,
+                          minimumSize: const Size(double.infinity, 54),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          elevation: 0,
+                        ),
+                        child: const Text(
+                          'ПОМОЧЬ ПРОЕКТУ',
+                          style: TextStyle(fontWeight: FontWeight.w900, fontSize: 14),
+                        ),
+                      ),
                     ],
                   ),
                 ),
