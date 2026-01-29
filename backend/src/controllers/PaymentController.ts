@@ -63,6 +63,19 @@ export class PaymentController {
       res.status(500).json({ message: "Error confirming payment" });
     }
   };
+
+  getMyDonations = async (req: any, res: Response) => {
+    try {
+      const donations = await this.transactionRepository.find({
+        where: { user: { id: req.user.id }, status: TransactionStatus.COMPLETED },
+        relations: ["collection"],
+        order: { createdAt: "DESC" }
+      });
+      res.json(donations);
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching donations" });
+    }
+  };
 }
 
 
