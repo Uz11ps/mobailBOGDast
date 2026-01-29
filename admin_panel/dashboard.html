@@ -35,6 +35,7 @@
             <a class="nav-link" onclick="showSection('gallery')"><i class="bi bi-images"></i> Галерея добра</a>
             <a class="nav-link" onclick="showSection('documents')"><i class="bi bi-file-earmark-text"></i> Документы</a>
             <a class="nav-link" onclick="showSection('partners')"><i class="bi bi-people"></i> Партнеры</a>
+            <a class="nav-link" onclick="showSection('news-admin')"><i class="bi bi-newspaper"></i> Новости</a>
             <a class="nav-link" onclick="showSection('updates')"><i class="bi bi-megaphone"></i> Новости проектов</a>
             <a class="nav-link" onclick="showSection('foundation')"><i class="bi bi-info-circle"></i> О фонде</a>
             <hr class="text-secondary">
@@ -107,6 +108,15 @@
             <div id="partners-list" class="row g-3"></div>
         </div>
 
+        <!-- News Admin Section -->
+        <div id="news-admin" class="section">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold mb-0">Новости фонда</h2>
+                <button class="btn btn-primary rounded-pill px-4" onclick="openNewsModal()"><i class="bi bi-plus-lg me-2"></i> Создать новость</button>
+            </div>
+            <div class="card p-0"><div class="table-responsive"><table class="table table-hover mb-0"><thead><tr class="bg-light"><th class="px-4">Дата</th><th>Заголовок</th><th class="text-end px-4">Удалить</th></tr></thead><tbody id="news-list-admin"></tbody></table></div></div>
+        </div>
+
         <!-- Updates Section -->
         <div id="updates" class="section">
             <div class="d-flex justify-content-between align-items-center mb-4">
@@ -174,10 +184,20 @@
         </form>
     </div></div></div></div>
 
+    <!-- News Modal -->
+    <div class="modal fade" id="newsModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0 rounded-4 shadow"><div class="modal-header border-0"><h5 class="fw-bold">Новая статья</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body p-4">
+        <form id="news-form">
+            <div class="mb-3"><label class="small fw-bold">Заголовок</label><input type="text" id="n-title" class="form-control" required></div>
+            <div class="mb-3"><label class="small fw-bold">Текст</label><textarea id="n-content" class="form-control" rows="4" required></textarea></div>
+            <div class="mb-3"><label class="small fw-bold">URL картинки</label><input type="url" id="n-imageUrl" class="form-control"></div>
+            <button type="submit" class="btn btn-primary w-100 py-3 fw-bold mt-3">Опубликовать</button>
+        </form>
+    </div></div></div></div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const API_URL = '/api';
-        let modal, galleryModal, docModal, partnerModal, updateModal;
+        let modal, galleryModal, docModal, partnerModal, updateModal, newsModal;
         let collections = [];
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -186,6 +206,7 @@
             docModal = new bootstrap.Modal(document.getElementById('docModal'));
             partnerModal = new bootstrap.Modal(document.getElementById('partnerModal'));
             updateModal = new bootstrap.Modal(document.getElementById('updateModal'));
+            newsModal = new bootstrap.Modal(document.getElementById('newsModal'));
             loadAllData();
         });
 
@@ -229,6 +250,12 @@
             const partners = await (await fetch(`${API_URL}/partners`)).json();
             document.getElementById('partners-list').innerHTML = partners.map(p => `
                 <div class="col-md-3"><div class="card p-3 text-center"><img src="${p.logoUrl}" class="mb-2 mx-auto" style="height:40px;object-fit:contain;"><h6>${p.name}</h6><button class="btn btn-sm text-danger" onclick="deleteItem('partners', '${p.id}')"><i class="bi bi-trash"></i></button></div></div>
+            `).join('');
+
+            // News
+            const news = await (await fetch(`${API_URL}/news`)).json();
+            document.getElementById('news-list-admin').innerHTML = news.map(n => `
+                <tr><td class="px-4">${new Date(n.createdAt).toLocaleDateString()}</td><td>${n.title}</td><td class="text-end px-4"><button class="btn btn-sm text-danger" onclick="deleteItem('news', '${n.id}')"><i class="bi bi-trash"></i></button></td></tr>
             `).join('');
 
             // Updates
@@ -314,6 +341,13 @@
             };
             await fetch(`${API_URL}/project-updates`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
             updateModal.hide(); loadAllData();
+        };
+
+        function openNewsModal() { newsModal.show(); }
+        document.getElementById('news-form').onsubmit = async (e) => {
+            e.preventDefault();
+            await fetch(`${API_URL}/news`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: document.getElementById('n-title').value, content: document.getElementById('n-content').value, imageUrl: document.getElementById('n-imageUrl').value }) });
+            newsModal.hide(); loadAllData();
         };
 
         function logout() { localStorage.removeItem('admin_token'); window.location.href = 'index.html'; }

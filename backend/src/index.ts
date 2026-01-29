@@ -12,6 +12,7 @@ import documentRoutes from "./routes/documentRoutes";
 import foundationRoutes from "./routes/foundationRoutes";
 import partnerRoutes from "./routes/partnerRoutes";
 import projectUpdateRoutes from "./routes/projectUpdateRoutes";
+import newsRoutes from "./routes/newsRoutes";
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.use("/api/documents", documentRoutes);
 app.use("/api/foundation", foundationRoutes);
 app.use("/api/partners", partnerRoutes);
 app.use("/api/project-updates", projectUpdateRoutes);
+app.use("/api/news", newsRoutes);
 
 app.get("/", (req, res) => {
   res.send("Charity API is running");

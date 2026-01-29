@@ -23,6 +23,7 @@ commands = [
     "cd ~/mobailBOGDast && git clean -fd && git reset --hard && git pull",
     "cd ~/mobailBOGDast/backend && npm install && npm run build && pm2 restart charity-api",
     "cp ~/mobailBOGDast/user_panel/index.html /var/www/charity_web/index.html",
+    "cp ~/mobailBOGDast/admin_panel/dashboard.html /var/www/charity_web/admin/dashboard.html",
     "chown -R www-data:www-data /var/www/charity_web"
 ]
 
