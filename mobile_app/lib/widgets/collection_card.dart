@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../models/collection_model.dart';
 import 'package:intl/intl.dart';
 
@@ -15,22 +16,23 @@ class CollectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currencyFormat = NumberFormat.currency(locale: 'ru_RU', symbol: '₽', decimalDigits: 0);
+    final progress = (collection.raisedAmount / collection.goalAmount).clamp(0.0, 1.0);
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      margin: const EdgeInsets.fromLTRB(16, 0, 16, 24),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(35),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
+            color: const Color(0xFF12141D).withOpacity(0.06),
+            blurRadius: 40,
+            offset: const Offset(0, 15),
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(35),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
@@ -45,23 +47,23 @@ class CollectionCard extends StatelessWidget {
                       children: [
                         Image.network(
                           collection.imageUrl!,
-                          height: 220,
+                          height: 260,
                           width: double.infinity,
                           fit: BoxFit.cover,
                         ),
                         Positioned(
-                          top: 12,
-                          right: 12,
+                          top: 20,
+                          right: 20,
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.9),
-                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(100),
                             ),
                             child: Text(
-                              'АКТУАЛЬНО',
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColor,
+                              collection.category?.toUpperCase() ?? 'ПРОЕКТ',
+                              style: GoogleFonts.manrope(
+                                color: const Color(0xFF12141D),
                                 fontSize: 10,
                                 fontWeight: FontWeight.w900,
                                 letterSpacing: 0.5,
@@ -73,53 +75,50 @@ class CollectionCard extends StatelessWidget {
                     ),
                   ),
                 Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(24.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         collection.title,
-                        style: const TextStyle(
-                          fontSize: 20,
+                        style: GoogleFonts.manrope(
+                          fontSize: 22,
                           fontWeight: FontWeight.w800,
+                          color: const Color(0xFF12141D),
                           letterSpacing: -0.5,
+                          height: 1.2,
                         ),
                       ),
-                      const SizedBox(height: 16),
-                      Stack(
-                        children: [
-                          Container(
-                            height: 10,
-                            width: double.infinity,
+                      const SizedBox(height: 20),
+                      // Progress Bar
+                      Container(
+                        height: 12,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF0F0F0),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: FractionallySizedBox(
+                          alignment: Alignment.centerLeft,
+                          widthFactor: progress,
+                          child: Container(
                             decoration: BoxDecoration(
-                              color: Colors.grey[100],
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                          ),
-                          AnimatedContainer(
-                            duration: const Duration(milliseconds: 1000),
-                            height: 10,
-                            width: (MediaQuery.of(context).size.width - 72) * collection.progress,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  Theme.of(context).primaryColor,
-                                  Theme.of(context).colorScheme.secondary,
-                                ],
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFF00C853), Color(0xFFB2FF59)],
                               ),
-                              borderRadius: BorderRadius.circular(5),
+                              borderRadius: BorderRadius.circular(10),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Theme.of(context).primaryColor.withOpacity(0.3),
-                                  blurRadius: 6,
-                                  offset: const Offset(0, 2),
+                                  color: const Color(0xFF00C853).withOpacity(0.4),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 4),
                                 ),
                               ],
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -127,20 +126,10 @@ class CollectionCard extends StatelessWidget {
                           _buildStatColumn('Цель', currencyFormat.format(collection.goalAmount), false, context),
                         ],
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 24),
                       ElevatedButton(
                         onPressed: onTap,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).primaryColor,
-                          foregroundColor: Colors.white,
-                          minimumSize: const Size(double.infinity, 54),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                          elevation: 0,
-                        ),
-                        child: const Text(
-                          'ПОМОЧЬ ПРОЕКТУ',
-                          style: TextStyle(fontWeight: FontWeight.w900, fontSize: 14),
-                        ),
+                        child: const Text('ПОДДЕРЖАТЬ'),
                       ),
                     ],
                   ),
@@ -162,15 +151,16 @@ class CollectionCard extends StatelessWidget {
           style: TextStyle(
             color: Colors.grey[500],
             fontSize: 12,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
           ),
         ),
+        const SizedBox(height: 4),
         Text(
           value,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: highlight ? Theme.of(context).primaryColor : Colors.black87,
+          style: GoogleFonts.manrope(
+            fontSize: 18,
+            fontWeight: FontWeight.w800,
+            color: highlight ? const Color(0xFF00C853) : const Color(0xFF12141D),
           ),
         ),
       ],

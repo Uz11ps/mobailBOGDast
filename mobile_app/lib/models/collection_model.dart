@@ -5,6 +5,7 @@ class CollectionModel {
   final double goalAmount;
   final double raisedAmount;
   final String? imageUrl;
+  final String? category;
   final String status;
   final DateTime createdAt;
 
@@ -15,6 +16,7 @@ class CollectionModel {
     required this.goalAmount,
     required this.raisedAmount,
     this.imageUrl,
+    this.category,
     required this.status,
     required this.createdAt,
   });
@@ -27,6 +29,7 @@ class CollectionModel {
       goalAmount: double.parse(json['goalAmount'].toString()),
       raisedAmount: double.parse(json['raisedAmount'].toString()),
       imageUrl: json['imageUrl'],
+      category: json['category'],
       status: json['status'],
       createdAt: DateTime.parse(json['createdAt']),
     );

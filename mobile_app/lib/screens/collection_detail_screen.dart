@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../models/collection_model.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -19,10 +20,10 @@ class CollectionDetailScreen extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
-            expandedHeight: 350,
+            expandedHeight: 400,
             pinned: true,
             stretch: true,
-            backgroundColor: Theme.of(context).primaryColor,
+            backgroundColor: const Color(0xFF12141D),
             leading: IconButton(
               icon: Container(
                 padding: const EdgeInsets.all(8),
@@ -30,7 +31,7 @@ class CollectionDetailScreen extends StatelessWidget {
                   color: Colors.white,
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.arrow_back, color: Colors.black, size: 20),
+                child: const Icon(Icons.arrow_back, color: Color(0xFF12141D), size: 20),
               ),
               onPressed: () => Navigator.pop(context),
             ),
@@ -46,154 +47,144 @@ class CollectionDetailScreen extends StatelessWidget {
           ),
           SliverToBoxAdapter(
             child: Transform.translate(
-              offset: const Offset(0, -30),
+              offset: const Offset(0, -40),
               child: Container(
                 decoration: const BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(45)),
                 ),
-                padding: const EdgeInsets.all(24.0),
+                padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor.withOpacity(0.1),
+                        color: const Color(0xFF00C853).withOpacity(0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.flash_on_rounded, size: 14, color: Theme.of(context).primaryColor),
-                          const SizedBox(width: 4),
-                          Text(
-                            'ВАЖНЫЙ СБОР',
-                            style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: 1,
-                            ),
-                          ),
-                        ],
+                      child: Text(
+                        'МЕЖДУНАРОДНЫЙ ПРОЕКТ',
+                        style: GoogleFonts.manrope(
+                          color: const Color(0xFF00C853),
+                          fontSize: 10,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1,
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 20),
                     Text(
                       collection.title,
-                      style: const TextStyle(
-                        fontSize: 28,
+                      style: GoogleFonts.manrope(
+                        fontSize: 32,
                         fontWeight: FontWeight.w900,
-                        height: 1.2,
-                        letterSpacing: -0.5,
+                        height: 1.1,
+                        color: const Color(0xFF12141D),
+                        letterSpacing: -1,
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 32),
+                    // Stats Box
                     Container(
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
                         color: const Color(0xFFF8F9FA),
-                        borderRadius: BorderRadius.circular(24),
+                        borderRadius: BorderRadius.circular(35),
                       ),
                       child: Column(
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Собрано', style: TextStyle(color: Colors.grey[600], fontSize: 13)),
-                                  Text(
-                                    currencyFormat.format(collection.raisedAmount),
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text('Цель', style: TextStyle(color: Colors.grey[600], fontSize: 13)),
-                                  Text(
-                                    currencyFormat.format(collection.goalAmount),
-                                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
+                              _buildBigStat('Собрано', currencyFormat.format(collection.raisedAmount), true, context),
+                              _buildBigStat('Цель', currencyFormat.format(collection.goalAmount), false, context),
                             ],
                           ),
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 24),
                           LinearPercentIndicator(
-                            lineHeight: 14.0,
+                            lineHeight: 16.0,
                             percent: collection.progress,
                             backgroundColor: Colors.white,
-                            progressColor: Theme.of(context).primaryColor,
+                            progressColor: const Color(0xFF00C853),
                             barRadius: const Radius.circular(10),
                             animation: true,
                             animationDuration: 1000,
                             padding: EdgeInsets.zero,
                           ),
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 16),
                           Text(
-                            '${(collection.progress * 100).toInt()}% от цели достигнуто',
-                            style: TextStyle(color: Colors.grey[600], fontSize: 12, fontWeight: FontWeight.w500),
+                            'Прогресс сбора: ${(collection.progress * 100).toInt()}%',
+                            style: GoogleFonts.manrope(
+                              color: Colors.grey[600],
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 32),
-                    const Text(
-                      'История сбора',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    const SizedBox(height: 40),
+                    Text(
+                      'О проекте',
+                      style: GoogleFonts.manrope(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w800,
+                        color: const Color(0xFF12141D),
+                      ),
                     ),
                     const SizedBox(height: 16),
                     Text(
                       collection.description,
                       style: TextStyle(
-                        fontSize: 16,
-                        height: 1.7,
+                        fontSize: 17,
+                        height: 1.8,
                         color: Colors.grey[800],
+                        letterSpacing: 0.2,
                       ),
                     ),
-                    const SizedBox(height: 32),
-                    const Text(
+                    const SizedBox(height: 40),
+                    Text(
                       'Этапы реализации',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: GoogleFonts.manrope(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w800,
+                        color: const Color(0xFF12141D),
+                      ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 24),
                     _buildTimelineStep(context, 'Сбор средств', 'В процессе', true, true),
                     _buildTimelineStep(context, 'Закупка материалов', 'Ожидание', false, true),
                     _buildTimelineStep(context, 'Начало работ', 'Ожидание', false, true),
                     _buildTimelineStep(context, 'Завершение и отчет', 'Ожидание', false, false),
-                    const SizedBox(height: 32),
-                    const Text(
+                    const SizedBox(height: 40),
+                    Text(
                       'Калькулятор помощи',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: GoogleFonts.manrope(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w800,
+                        color: const Color(0xFF12141D),
+                      ),
                     ),
                     const SizedBox(height: 16),
                     Container(
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor.withOpacity(0.05),
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(color: Theme.of(context).primaryColor.withOpacity(0.1)),
+                        color: const Color(0xFF00C853).withOpacity(0.05),
+                        borderRadius: BorderRadius.circular(35),
+                        border: Border.all(color: const Color(0xFF00C853).withOpacity(0.1)),
                       ),
                       child: Column(
                         children: [
-                          _buildImpactItem(Icons.restaurant, '1000 ₽', '15 горячих обедов'),
-                          const Divider(height: 30),
-                          _buildImpactItem(Icons.architecture, '5000 ₽', '50 кирпичей для школы'),
-                          const Divider(height: 30),
-                          _buildImpactItem(Icons.local_drink, '10000 ₽', 'Часть системы водоснабжения'),
+                          _buildImpactItem(Icons.restaurant_rounded, '1000 ₽', '15 горячих обедов'),
+                          const Divider(height: 40, color: Color(0xFF00C853), thickness: 0.1),
+                          _buildImpactItem(Icons.architecture_rounded, '5000 ₽', '50 кирпичей для школы'),
+                          const Divider(height: 40, color: Color(0xFF00C853), thickness: 0.1),
+                          _buildImpactItem(Icons.local_drink_rounded, '10000 ₽', 'Часть системы водоснабжения'),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 120),
+                    const SizedBox(height: 140),
                   ],
                 ),
               ),
@@ -202,14 +193,14 @@ class CollectionDetailScreen extends StatelessWidget {
         ],
       ),
       bottomSheet: Container(
-        padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
+        padding: const EdgeInsets.fromLTRB(24, 20, 24, 40),
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 20,
-              offset: const Offset(0, -5),
+              color: const Color(0xFF12141D).withOpacity(0.08),
+              blurRadius: 30,
+              offset: const Offset(0, -10),
             ),
           ],
         ),
@@ -220,19 +211,34 @@ class CollectionDetailScreen extends StatelessWidget {
               MaterialPageRoute(builder: (context) => PaymentScreen(collection: collection)),
             );
           },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Theme.of(context).primaryColor,
-            foregroundColor: Colors.white,
-            minimumSize: const Size(double.infinity, 64),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            elevation: 0,
-          ),
-          child: const Text(
-            'Поддержать проект',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
+          child: const Text('ПОДДЕРЖАТЬ ПРОЕКТ'),
         ),
       ),
+    );
+  }
+
+  Widget _buildBigStat(String label, String value, bool highlight, BuildContext context) {
+    return Column(
+      crossAxisAlignment: highlight ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.manrope(
+            color: Colors.grey[500],
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          style: GoogleFonts.manrope(
+            fontSize: 22,
+            fontWeight: FontWeight.w900,
+            color: highlight ? const Color(0xFF00C853) : const Color(0xFF12141D),
+          ),
+        ),
+      ],
     );
   }
 
@@ -242,31 +248,45 @@ class CollectionDetailScreen extends StatelessWidget {
         Column(
           children: [
             Container(
-              width: 20,
-              height: 20,
+              width: 24,
+              height: 24,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: isActive ? Theme.of(context).primaryColor : Colors.grey[300],
-                border: Border.all(color: Colors.white, width: 3),
-                boxShadow: isActive ? [BoxShadow(color: Theme.of(context).primaryColor.withOpacity(0.4), blurRadius: 8)] : [],
+                color: isActive ? const Color(0xFF00C853) : Colors.grey[200],
+                border: Border.all(color: Colors.white, width: 4),
+                boxShadow: isActive ? [BoxShadow(color: const Color(0xFF00C853).withOpacity(0.4), blurRadius: 10)] : [],
               ),
             ),
             if (hasNext)
               Container(
                 width: 2,
-                height: 40,
-                color: isActive ? Theme.of(context).primaryColor : Colors.grey[300],
+                height: 50,
+                color: isActive ? const Color(0xFF00C853) : Colors.grey[200],
               ),
           ],
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: 20),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: TextStyle(fontWeight: FontWeight.bold, color: isActive ? Colors.black : Colors.grey)),
-              Text(status, style: TextStyle(fontSize: 12, color: isActive ? Theme.of(context).primaryColor : Colors.grey)),
-              if (hasNext) const SizedBox(height: 25),
+              Text(
+                title,
+                style: GoogleFonts.manrope(
+                  fontWeight: FontWeight.w800,
+                  fontSize: 16,
+                  color: isActive ? const Color(0xFF12141D) : Colors.grey,
+                ),
+              ),
+              Text(
+                status,
+                style: GoogleFonts.manrope(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: isActive ? const Color(0xFF00C853) : Colors.grey,
+                ),
+              ),
+              if (hasNext) const SizedBox(height: 35),
             ],
           ),
         ),
@@ -277,14 +297,41 @@ class CollectionDetailScreen extends StatelessWidget {
   Widget _buildImpactItem(IconData icon, String amount, String result) {
     return Row(
       children: [
-        Icon(icon, color: const Color(0xFF00C853)),
-        const SizedBox(width: 15),
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF00C853).withOpacity(0.1),
+                blurRadius: 10,
+              ),
+            ],
+          ),
+          child: Icon(icon, color: const Color(0xFF00C853), size: 24),
+        ),
+        const SizedBox(width: 20),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(amount, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 18)),
-              Text(result, style: const TextStyle(color: Colors.grey, fontSize: 13)),
+              Text(
+                amount,
+                style: GoogleFonts.manrope(
+                  fontWeight: FontWeight.w900,
+                  fontSize: 20,
+                  color: const Color(0xFF12141D),
+                ),
+              ),
+              Text(
+                result,
+                style: GoogleFonts.manrope(
+                  color: Colors.grey[600],
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ],
           ),
         ),

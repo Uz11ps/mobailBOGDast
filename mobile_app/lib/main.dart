@@ -28,35 +28,56 @@ class CharityApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xFF00C853),
           primary: const Color(0xFF00C853),
-          secondary: const Color(0xFFFFD600), // Joyful Yellow
-          tertiary: const Color(0xFF2979FF), // Trust Blue
+          secondary: const Color(0xFFFFD600),
           surface: Colors.white,
+          onSurface: const Color(0xFF12141D),
         ),
         scaffoldBackgroundColor: const Color(0xFFF8F9FA),
         textTheme: GoogleFonts.nunitoTextTheme(
           Theme.of(context).textTheme,
         ).copyWith(
           displayLarge: GoogleFonts.manrope(
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w900,
+            color: const Color(0xFF12141D),
+            letterSpacing: -2,
+          ),
+          displayMedium: GoogleFonts.manrope(
+            fontWeight: FontWeight.w900,
+            color: const Color(0xFF12141D),
             letterSpacing: -1,
           ),
           headlineMedium: GoogleFonts.manrope(
             fontWeight: FontWeight.w800,
+            color: const Color(0xFF12141D),
             letterSpacing: -0.5,
           ),
           titleLarge: GoogleFonts.manrope(
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w800,
+            color: const Color(0xFF12141D),
           ),
         ),
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.white,
           elevation: 0,
+          scrolledUnderElevation: 0,
           centerTitle: false,
           titleTextStyle: GoogleFonts.manrope(
-            color: Colors.black,
+            color: const Color(0xFF12141D),
             fontSize: 24,
             fontWeight: FontWeight.w900,
             letterSpacing: -0.5,
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF12141D),
+            foregroundColor: Colors.white,
+            minimumSize: const Size(double.infinity, 60),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+            textStyle: GoogleFonts.manrope(
+              fontWeight: FontWeight.w800,
+              fontSize: 16,
+            ),
           ),
         ),
       ),

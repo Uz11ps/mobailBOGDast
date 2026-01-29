@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../providers/collection_provider.dart';
 import '../widgets/collection_card.dart';
 import 'collection_detail_screen.dart';
+import 'profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -36,31 +39,29 @@ class _HomeScreenState extends State<HomeScreen> {
               SliverAppBar(
                 floating: true,
                 snap: true,
-                expandedHeight: 160,
+                expandedHeight: 120,
                 backgroundColor: Colors.white,
                 surfaceTintColor: Colors.transparent,
-                flexibleSpace: FlexibleSpaceBar(
-                  centerTitle: false,
-                  titlePadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  title: Column(
-                    mainAxisSize: MainAxisSize.min,
+                title: Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Добро пожаловать ✨',
+                        'НОВАЯ ЖИЗНЬ',
+                        style: GoogleFonts.manrope(
+                          color: const Color(0xFF12141D),
+                          fontSize: 24,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: -1,
+                        ),
+                      ),
+                      Text(
+                        'Помогать легко ✨',
                         style: TextStyle(
                           color: Colors.grey[600],
                           fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const Text(
-                        'Новая Жизнь',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: -1,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],
@@ -70,23 +71,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   Container(
                     margin: const EdgeInsets.only(right: 16),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor.withOpacity(0.1),
+                      color: const Color(0xFFF8F9FA),
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
-                      icon: Icon(Icons.search_rounded, color: Theme.of(context).primaryColor),
-                      onPressed: () {},
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(right: 16),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor.withOpacity(0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: IconButton(
-                      icon: Icon(Icons.notifications_none_rounded, color: Theme.of(context).primaryColor),
-                      onPressed: () {},
+                      icon: const Icon(Icons.person_outline_rounded, color: Color(0xFF12141D)),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const ProfileScreen()),
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -94,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
               // Stories Section
               SliverToBoxAdapter(
                 child: Container(
-                  height: 110,
+                  height: 120,
                   margin: const EdgeInsets.symmetric(vertical: 10),
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
@@ -103,24 +98,39 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (context, index) {
                       final titles = ["Школа в Мали", "Обед в Африке", "Мечеть Гвинея", "Вода Камерун", "Отчет 2026", "Наша команда"];
                       return Padding(
-                        padding: const EdgeInsets.only(right: 15),
+                        padding: const EdgeInsets.only(right: 18),
                         child: Column(
                           children: [
                             Container(
                               padding: const EdgeInsets.all(3),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                border: Border.all(color: Theme.of(context).primaryColor, width: 2.5),
+                                gradient: const LinearGradient(
+                                  colors: [Color(0xFF00C853), Color(0xFFFFD600)],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
                               ),
-                              child: CircleAvatar(
-                                radius: 30,
-                                backgroundImage: NetworkImage('https://picsum.photos/200?random=$index'),
+                              child: Container(
+                                padding: const EdgeInsets.all(2),
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: CircleAvatar(
+                                  radius: 32,
+                                  backgroundImage: NetworkImage('https://picsum.photos/200?random=$index'),
+                                ),
                               ),
                             ),
-                            const SizedBox(height: 6),
+                            const SizedBox(height: 8),
                             Text(
                               titles[index],
-                              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                              style: GoogleFonts.nunito(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w800,
+                                color: const Color(0xFF12141D),
+                              ),
                             ),
                           ],
                         ),
@@ -129,106 +139,104 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
+              // Impact Banner
               SliverToBoxAdapter(
                 child: Container(
                   margin: const EdgeInsets.all(16),
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Theme.of(context).primaryColor,
-                        const Color(0xFF00E676),
-                      ],
+                    color: const Color(0xFF12141D),
+                    borderRadius: BorderRadius.circular(32),
+                    image: DecorationImage(
+                      image: const NetworkImage('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=800'),
+                      fit: BoxFit.cover,
+                      opacity: 0.3,
                     ),
-                    borderRadius: BorderRadius.circular(24),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Theme.of(context).primaryColor.withOpacity(0.3),
-                        blurRadius: 15,
-                        offset: const Offset(0, 8),
-                      ),
-                    ],
                   ),
-                  child: Row(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Сделаем мир лучше! ❤️',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              'Уже более 10,000 человек помогли в этом месяце',
-                              style: TextStyle(
-                                color: Colors.white.withOpacity(0.8),
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF00C853),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          'ИТОГИ МЕСЯЦА',
+                          style: GoogleFonts.manrope(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w900,
+                          ),
                         ),
                       ),
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
-                          shape: BoxShape.circle,
+                      const SizedBox(height: 16),
+                      Text(
+                        'Вместе мы собрали\n3 359 255 ₽',
+                        style: GoogleFonts.manrope(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w900,
+                          height: 1.1,
                         ),
-                        child: const Icon(Icons.auto_awesome, color: Colors.white),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Это 15 построенных колодцев и 2 школы в Гвинее',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.7),
+                          fontSize: 13,
+                        ),
                       ),
                     ],
                   ),
                 ),
               ),
               // Category Filter Bar
-              SliverToBoxAdapter(
-                child: Container(
-                  height: 60,
-                  color: Colors.white,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    itemCount: _categories.length,
-                    itemBuilder: (context, index) {
-                      final category = _categories[index];
-                      final isSelected = _selectedCategory == category;
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: InkWell(
-                          onTap: () => setState(() => _selectedCategory = category),
-                          borderRadius: BorderRadius.circular(20),
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 300),
-                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: isSelected ? Theme.of(context).primaryColor : const Color(0xFFF8F9FA),
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: isSelected ? [
-                                BoxShadow(
-                                  color: Theme.of(context).primaryColor.withOpacity(0.3),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 4),
-                                )
-                              ] : [],
-                            ),
-                            child: Text(
-                              category,
-                              style: TextStyle(
-                                color: isSelected ? Colors.white : Colors.black87,
-                                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                                fontSize: 13,
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: _SliverAppBarDelegate(
+                  minHeight: 60.0,
+                  maxHeight: 60.0,
+                  child: Container(
+                    color: const Color(0xFFF8F9FA),
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      itemCount: _categories.length,
+                      itemBuilder: (context, index) {
+                        final category = _categories[index];
+                        final isSelected = _selectedCategory == category;
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: InkWell(
+                            onTap: () => setState(() => _selectedCategory = category),
+                            borderRadius: BorderRadius.circular(18),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: isSelected ? const Color(0xFF12141D) : Colors.white,
+                                borderRadius: BorderRadius.circular(18),
+                                border: Border.all(
+                                  color: isSelected ? const Color(0xFF12141D) : Colors.grey[200]!,
+                                  width: 1,
+                                ),
+                              ),
+                              child: Text(
+                                category,
+                                style: GoogleFonts.manrope(
+                                  color: isSelected ? Colors.white : const Color(0xFF12141D),
+                                  fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+                                  fontSize: 14,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -331,5 +339,33 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+}
+
+class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  _SliverAppBarDelegate({
+    required this.minHeight,
+    required this.maxHeight,
+    required this.child,
+  });
+  final double minHeight;
+  final double maxHeight;
+  final Widget child;
+
+  @override
+  double get minExtent => minHeight;
+  @override
+  double get maxExtent => math.max(maxHeight, minHeight);
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return SizedBox.expand(child: child);
+  }
+
+  @override
+  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
+    return maxHeight != oldDelegate.maxHeight ||
+        minHeight != oldDelegate.minHeight ||
+        child != oldDelegate.child;
   }
 }
