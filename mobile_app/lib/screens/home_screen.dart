@@ -9,6 +9,7 @@ import '../widgets/collection_card.dart';
 import '../widgets/custom_bottom_bar.dart';
 import 'collection_detail_screen.dart';
 import 'profile_screen.dart';
+import 'story_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -88,19 +89,23 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-              actions: [
-                Container(
-                  margin: const EdgeInsets.only(right: 16),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF8F9FA),
-                    shape: BoxShape.circle,
+                actions: [
+                  Container(
+                    margin: const EdgeInsets.only(right: 16),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF8F9FA),
+                      shape: BoxShape.circle,
+                    ),
+                    child: IconButton(
+                      icon: const Icon(Icons.search_rounded, color: Color(0xFF12141D)),
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Поиск пока в разработке')),
+                        );
+                      },
+                    ),
                   ),
-                  child: IconButton(
-                    icon: const Icon(Icons.search_rounded, color: Color(0xFF12141D)),
-                    onPressed: () {},
-                  ),
-                ),
-              ],
+                ],
             ),
             // Stories Section
             SliverToBoxAdapter(
@@ -110,45 +115,58 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  itemCount: 6,
+                  itemCount: provider.stories.length,
                   itemBuilder: (context, index) {
-                    final titles = ["Школа в Мали", "Обед в Африке", "Мечеть Гвинея", "Вода Камерун", "Отчет 2026", "Наша команда"];
+                    final story = provider.stories[index];
                     return Padding(
                       padding: const EdgeInsets.only(right: 18),
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(3),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: const LinearGradient(
-                                colors: [Color(0xFF00C853), Color(0xFFFFD600)],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => StoryScreen(
+                                stories: provider.stories,
+                                initialIndex: index,
                               ),
                             ),
-                            child: Container(
-                              padding: const EdgeInsets.all(2),
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(3),
+                              decoration: BoxDecoration(
                                 shape: BoxShape.circle,
+                                gradient: const LinearGradient(
+                                  colors: [Color(0xFF00C853), Color(0xFFFFD600)],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
                               ),
-                              child: CircleAvatar(
-                                radius: 32,
-                                backgroundImage: NetworkImage('https://picsum.photos/200?random=$index'),
+                              child: Container(
+                                padding: const EdgeInsets.all(2),
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: CircleAvatar(
+                                  radius: 32,
+                                  backgroundImage: NetworkImage(story.imageUrl),
+                                ),
+                              ),
+                            ).animate().scale(delay: (index * 100).ms, duration: 400.ms, curve: Curves.easeOutBack),
+                            const SizedBox(height: 8),
+                            Text(
+                              story.title,
+                              style: GoogleFonts.nunito(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w800,
+                                color: const Color(0xFF12141D),
                               ),
                             ),
-                          ).animate().scale(delay: (index * 100).ms, duration: 400.ms, curve: Curves.backOut),
-                          const SizedBox(height: 8),
-                          Text(
-                            titles[index],
-                            style: GoogleFonts.nunito(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w800,
-                              color: const Color(0xFF12141D),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     );
                   },

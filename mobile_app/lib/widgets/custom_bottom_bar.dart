@@ -62,22 +62,25 @@ class CustomBottomBar extends StatelessWidget {
   }
 
   Widget _buildCenterItem() {
-    return Container(
-      height: 60,
-      width: 60,
-      decoration: BoxDecoration(
-        color: const Color(0xFF00C853),
-        shape: BoxShape.circle,
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF00C853).withOpacity(0.4),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: const Icon(Icons.favorite_rounded, color: Colors.white, size: 30),
-    ).animate(onPlay: (controller) => controller.repeat(reverse: true))
-     .scale(begin: const Offset(1, 1), end: const Offset(1.1, 1.1), duration: 1000.ms, curve: Curves.easeInOut);
+    return GestureDetector(
+      onTap: () => onTap(1), // Index 1 for the heart button
+      child: Container(
+        height: 60,
+        width: 60,
+        decoration: BoxDecoration(
+          color: const Color(0xFF00C853),
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF00C853).withOpacity(0.4),
+              blurRadius: 15,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        child: const Icon(Icons.favorite_rounded, color: Colors.white, size: 30),
+      ).animate(onPlay: (controller) => controller.repeat(reverse: true))
+       .scale(begin: const Offset(1, 1), end: const Offset(1.1, 1.1), duration: 1000.ms, curve: Curves.easeInOut),
+    );
   }
 }

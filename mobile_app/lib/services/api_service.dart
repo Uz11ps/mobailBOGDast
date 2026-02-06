@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/collection_model.dart';
+import '../models/story_model.dart';
 import '../models/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,6 +21,16 @@ class ApiService {
       return jsonResponse.map((data) => CollectionModel.fromJson(data)).toList();
     } else {
       throw Exception('Failed to load collections');
+    }
+  }
+
+  Future<List<StoryModel>> getStories() async {
+    final response = await http.get(Uri.parse('$baseUrl/stories'));
+    if (response.statusCode == 200) {
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse.map((data) => StoryModel.fromJson(data)).toList();
+    } else {
+      throw Exception('Failed to load stories');
     }
   }
 

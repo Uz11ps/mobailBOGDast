@@ -9,6 +9,7 @@ import { FoundationInfo } from "./entities/FoundationInfo";
 import { Partner } from "./entities/Partner";
 import { ProjectUpdate } from "./entities/ProjectUpdate";
 import { News } from "./entities/News";
+import { Story } from "./entities/Story";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -22,7 +23,7 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_NAME || "charity_db",
   synchronize: true, // Set to false in production
   logging: false,
-  entities: [User, Collection, Transaction, GalleryItem, AppDocument, FoundationInfo, Partner, ProjectUpdate, News],
+  entities: [User, Collection, Transaction, GalleryItem, AppDocument, FoundationInfo, Partner, ProjectUpdate, News, Story],
   migrations: [],
   subscribers: [],
 });
