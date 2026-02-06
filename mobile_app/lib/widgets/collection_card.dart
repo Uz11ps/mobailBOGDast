@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/collection_model.dart';
 import 'package:intl/intl.dart';
+import 'ken_burns_image.dart';
 
 class CollectionCard extends StatelessWidget {
   final CollectionModel collection;
@@ -45,12 +46,7 @@ class CollectionCard extends StatelessWidget {
                     tag: 'collection_image_${collection.id}',
                     child: Stack(
                       children: [
-                        Image.network(
-                          collection.imageUrl!,
-                          height: 260,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
+                        KenBurnsImage(imageUrl: collection.imageUrl!),
                         Positioned(
                           top: 20,
                           right: 20,
