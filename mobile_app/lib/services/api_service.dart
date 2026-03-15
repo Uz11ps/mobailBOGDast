@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../models/collection_model.dart';
 import '../models/story_model.dart';
@@ -15,22 +16,32 @@ class ApiService {
   }
 
   Future<List<CollectionModel>> getCollections() async {
-    final response = await http.get(Uri.parse('$baseUrl/collections'));
-    if (response.statusCode == 200) {
-      List jsonResponse = json.decode(response.body);
-      return jsonResponse.map((data) => CollectionModel.fromJson(data)).toList();
-    } else {
-      throw Exception('Failed to load collections');
+    try {
+      final response = await http.get(Uri.parse('$baseUrl/collections')).timeout(const Duration(seconds: 10));
+      if (response.statusCode == 200) {
+        List jsonResponse = json.decode(response.body);
+        return jsonResponse.map((data) => CollectionModel.fromJson(data)).toList();
+      } else {
+        throw Exception('Server error: ${response.statusCode}');
+      }
+    } catch (e) {
+      debugPrint('API Error (getCollections): $e');
+      rethrow;
     }
   }
 
   Future<List<StoryModel>> getStories() async {
-    final response = await http.get(Uri.parse('$baseUrl/stories'));
-    if (response.statusCode == 200) {
-      List jsonResponse = json.decode(response.body);
-      return jsonResponse.map((data) => StoryModel.fromJson(data)).toList();
-    } else {
-      throw Exception('Failed to load stories');
+    try {
+      final response = await http.get(Uri.parse('$baseUrl/stories')).timeout(const Duration(seconds: 10));
+      if (response.statusCode == 200) {
+        List jsonResponse = json.decode(response.body);
+        return jsonResponse.map((data) => StoryModel.fromJson(data)).toList();
+      } else {
+        throw Exception('Server error: ${response.statusCode}');
+      }
+    } catch (e) {
+      debugPrint('API Error (getStories): $e');
+      rethrow;
     }
   }
 

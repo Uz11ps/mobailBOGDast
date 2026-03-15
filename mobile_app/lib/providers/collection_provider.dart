@@ -21,6 +21,14 @@ class CollectionProvider with ChangeNotifier {
       await fetchStories();
     } catch (e) {
       debugPrint('Error fetching collections: $e');
+      // If it fails, try once more after 2 seconds
+      await Future.delayed(const Duration(seconds: 2));
+      try {
+        _collections = await _apiService.getCollections();
+        await fetchStories();
+      } catch (e2) {
+        debugPrint('Second attempt failed: $e2');
+      }
     } finally {
       _isLoading = false;
       notifyListeners();

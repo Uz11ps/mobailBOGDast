@@ -28,8 +28,10 @@ class CustomBottomBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _buildItem(0, Icons.home_rounded, "Главная"),
+          _buildItem(1, Icons.public_rounded, "Карта"),
           _buildCenterItem(),
-          _buildItem(2, Icons.person_rounded, "Профиль"),
+          _buildItem(3, Icons.eco_rounded, "Вклад"),
+          _buildItem(4, Icons.person_rounded, "Профиль"),
         ],
       ),
     );
@@ -39,20 +41,21 @@ class CustomBottomBar extends StatelessWidget {
     final isSelected = currentIndex == index;
     return GestureDetector(
       onTap: () => onTap(index),
+      behavior: HitTestBehavior.opaque,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             icon,
             color: isSelected ? const Color(0xFF00C853) : Colors.white.withOpacity(0.5),
-            size: 28,
+            size: 24,
           ).animate(target: isSelected ? 1 : 0).scale(begin: const Offset(1, 1), end: const Offset(1.2, 1.2)),
           const SizedBox(height: 4),
           Text(
             label,
             style: GoogleFonts.manrope(
               color: isSelected ? const Color(0xFF00C853) : Colors.white.withOpacity(0.5),
-              fontSize: 10,
+              fontSize: 9,
               fontWeight: FontWeight.w800,
             ),
           ),
@@ -63,10 +66,10 @@ class CustomBottomBar extends StatelessWidget {
 
   Widget _buildCenterItem() {
     return GestureDetector(
-      onTap: () => onTap(1), // Index 1 for the heart button
+      onTap: () => onTap(2), // Index 2 for the heart button (center)
       child: Container(
-        height: 60,
-        width: 60,
+        height: 55,
+        width: 55,
         decoration: BoxDecoration(
           color: const Color(0xFF00C853),
           shape: BoxShape.circle,
@@ -78,7 +81,7 @@ class CustomBottomBar extends StatelessWidget {
             ),
           ],
         ),
-        child: const Icon(Icons.favorite_rounded, color: Colors.white, size: 30),
+        child: const Icon(Icons.favorite_rounded, color: Colors.white, size: 28),
       ).animate(onPlay: (controller) => controller.repeat(reverse: true))
        .scale(begin: const Offset(1, 1), end: const Offset(1.1, 1.1), duration: 1000.ms, curve: Curves.easeInOut),
     );

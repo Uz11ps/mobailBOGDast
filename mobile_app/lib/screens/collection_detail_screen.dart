@@ -39,9 +39,19 @@ class CollectionDetailScreen extends StatelessWidget {
               stretchModes: const [StretchMode.zoomBackground],
               background: Hero(
                 tag: 'collection_image_${collection.id}',
-                child: collection.imageUrl != null
-                    ? Image.network(collection.imageUrl!, fit: BoxFit.cover)
-                    : Container(color: Colors.grey[300]),
+                child: collection.images != null && collection.images!.isNotEmpty
+                    ? PageView.builder(
+                        itemCount: collection.images!.length,
+                        itemBuilder: (context, index) {
+                          return Image.network(
+                            collection.images![index],
+                            fit: BoxFit.cover,
+                          );
+                        },
+                      )
+                    : (collection.imageUrl != null
+                        ? Image.network(collection.imageUrl!, fit: BoxFit.cover)
+                        : Container(color: Colors.grey[300])),
               ),
             ),
           ),

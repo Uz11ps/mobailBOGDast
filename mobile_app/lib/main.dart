@@ -3,8 +3,33 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'providers/collection_provider.dart';
 import 'screens/home_screen.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter_android/webview_flutter_android.dart';
+import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
+import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kIsWeb;
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Инициализация WebView платформы при запуске приложения
+  if (!kIsWeb && WebViewPlatform.instance == null) {
+    try {
+      if (Platform.isAndroid) {
+        WebViewPlatform.instance = AndroidWebViewPlatform();
+      } else if (Platform.isIOS) {
+        WebViewPlatform.instance = WebKitWebViewPlatform();
+      }
+      // На Windows webview_flutter автоматически использует webview_windows через плагин
+      // Даем время на инициализацию плагина
+      if (Platform.isWindows) {
+        await Future.delayed(const Duration(milliseconds: 500));
+      }
+    } catch (e) {
+      debugPrint('WebView initialization error: $e');
+    }
+  }
+
   runApp(
     MultiProvider(
       providers: [

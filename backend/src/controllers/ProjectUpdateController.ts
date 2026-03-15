@@ -6,8 +6,11 @@ export class ProjectUpdateController {
   private updateRepository = AppDataSource.getRepository(ProjectUpdate);
 
   getByCollection = async (req: Request, res: Response) => {
+    const rawCollectionId = req.params.collectionId;
+    const collectionId = Array.isArray(rawCollectionId) ? rawCollectionId[0] : rawCollectionId;
+
     const updates = await this.updateRepository.find({
-      where: { collection: { id: req.params.collectionId } },
+      where: { collection: { id: collectionId } },
       order: { createdAt: "DESC" }
     });
     res.json(updates);

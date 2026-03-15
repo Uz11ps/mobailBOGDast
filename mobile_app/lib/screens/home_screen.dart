@@ -10,6 +10,8 @@ import '../widgets/custom_bottom_bar.dart';
 import 'collection_detail_screen.dart';
 import 'profile_screen.dart';
 import 'story_screen.dart';
+import 'impact_map_screen.dart';
+import 'my_impact_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -36,9 +38,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
       body: IndexedStack(
-        index: _currentIndex == 1 ? 0 : (_currentIndex == 2 ? 1 : 0), // Simple logic for now
+        index: _currentIndex,
         children: [
           _buildHomeContent(),
+          const ImpactMapScreen(),
+          _buildHomeContent(), // Center heart button also shows home for now
+          const MyImpactScreen(),
           const ProfileScreen(),
         ],
       ),
@@ -66,26 +71,39 @@ class _HomeScreenState extends State<HomeScreen> {
               surfaceTintColor: Colors.transparent,
               title: Padding(
                 padding: const EdgeInsets.only(top: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
                   children: [
-                    Text(
-                      'НОВАЯ ЖИЗНЬ',
-                      style: GoogleFonts.manrope(
-                        color: const Color(0xFF12141D),
-                        fontSize: 24,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: -1,
+                    Image.asset(
+                      'assets/logo.png',
+                      width: 40,
+                      height: 40,
+                      fit: BoxFit.contain,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'НОВАЯ ЖИЗНЬ',
+                            style: GoogleFonts.manrope(
+                              color: const Color(0xFF12141D),
+                              fontSize: 24,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: -1,
+                            ),
+                          ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.2),
+                          Text(
+                            'Помогать легко ✨',
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ).animate().fadeIn(delay: 200.ms, duration: 600.ms),
+                        ],
                       ),
-                    ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.2),
-                    Text(
-                      'Помогать легко ✨',
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ).animate().fadeIn(delay: 200.ms, duration: 600.ms),
+                    ),
                   ],
                 ),
               ),
@@ -285,14 +303,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               )
             else if (provider.collections.isEmpty)
-              const SliverFillRemaining(
+              SliverFillRemaining(
                 child: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.volunteer_activism_outlined, size: 60, color: Colors.grey),
-                      SizedBox(height: 16),
-                      Text('Пока нет активных сборов', style: TextStyle(color: Colors.grey)),
+                      const Icon(Icons.wifi_off_rounded, size: 60, color: Colors.grey),
+                      const SizedBox(height: 16),
+                      const Text('Не удалось загрузить данные', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 8),
+                      TextButton(
+                        onPressed: () => provider.fetchCollections(),
+                        child: const Text('ПОПРОБОВАТЬ СНОВА', style: TextStyle(color: Color(0xFF00C853))),
+                      ),
                     ],
                   ),
                 ),

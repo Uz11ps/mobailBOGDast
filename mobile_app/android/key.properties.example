@@ -1,0 +1,13 @@
+# Скопируйте этот файл в key.properties и заполните реальными значениями
+# НЕ коммитьте key.properties в git!
+
+storePassword=ВАШ_ПАРОЛЬ_ХРАНИЛИЩА
+keyPassword=ВАШ_ПАРОЛЬ_КЛЮЧА
+keyAlias=upload
+storeFile=ПУТЬ_К_ФАЙЛУ_КЛЮЧА
+
+# Пример:
+# storePassword=MySecurePassword123!
+# keyPassword=MySecurePassword123!
+# keyAlias=upload
+# storeFile=C:/Users/1/upload-keystore.jks

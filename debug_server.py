@@ -1,26 +1,26 @@
 import paramiko
 import sys
 
-def check_server(hostname, username, password):
+def debug_server_path(hostname, username, password):
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     try:
         client.connect(hostname, username=username, password=password, timeout=60)
         
-        print("--- Nginx Config ---")
-        stdin, stdout, stderr = client.exec_command("ls /etc/nginx/sites-enabled/")
-        configs = stdout.read().decode().split()
-        for cfg in configs:
-            print(f"\nConfig: {cfg}")
-            stdin, stdout, stderr = client.exec_command(f"cat /etc/nginx/sites-enabled/{cfg}")
-            print(stdout.read().decode())
-        
-        print("\n--- Directory Content /var/www/charity_web ---")
-        stdin, stdout, stderr = client.exec_command("ls -la /var/www/charity_web")
+        print("--- Checking current directory and branch ---")
+        stdin, stdout, stderr = client.exec_command("cd ~/mobailBOGDast && pwd && git branch && git log -1 --oneline")
         print(stdout.read().decode())
         
-        print("\n--- Git Status in repo ---")
-        stdin, stdout, stderr = client.exec_command("cd ~/mobailBOGDast && git log -1")
+        print("\n--- Checking backend/src/index.ts content ---")
+        stdin, stdout, stderr = client.exec_command("cat ~/mobailBOGDast/backend/src/index.ts")
+        print(stdout.read().decode())
+        
+        print("\n--- Checking PM2 process list ---")
+        stdin, stdout, stderr = client.exec_command("pm2 list")
+        print(stdout.read().decode())
+        
+        print("\n--- Checking PM2 process info for charity-api ---")
+        stdin, stdout, stderr = client.exec_command("pm2 show charity-api")
         print(stdout.read().decode())
 
         client.close()
@@ -31,4 +31,4 @@ hostname = 'xn--80adnee0afc6kza.com'
 username = 'root'
 password = 'kxNG6YOk32s0qWNo'
 
-check_server(hostname, username, password)
+debug_server_path(hostname, username, password)

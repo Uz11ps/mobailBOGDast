@@ -25,6 +25,9 @@ export class Collection {
   @Column({ nullable: true })
   imageUrl!: string;
 
+  @Column("simple-array", { nullable: true })
+  images!: string[];
+
   @Column({ nullable: true })
   country!: string;
 
