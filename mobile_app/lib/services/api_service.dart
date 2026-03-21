@@ -1,0 +1,79 @@
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+import '../models/collection_model.dart';
+import '../models/story_model.dart';
+import '../models/user_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class ApiService {
+  // Используем работающий HTTPS домен (новая-жизнь.com)
+  static const String baseUrl = 'https://xn--80adnee0afc6kza.com/api'; 
+
+  Future<String?> _getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token');
+  }
+
+  Future<List<CollectionModel>> getCollections() async {
+    try {
+      final response = await http.get(Uri.parse('$baseUrl/collections')).timeout(const Duration(seconds: 10));
+      if (response.statusCode == 200) {
+        List jsonResponse = json.decode(response.body);
+        return jsonResponse.map((data) => CollectionModel.fromJson(data)).toList();
+      } else {
+        throw Exception('Server error: ${response.statusCode}');
+      }
+    } catch (e) {
+      debugPrint('API Error (getCollections): $e');
+      rethrow;
+    }
+  }
+
+  Future<List<StoryModel>> getStories() async {
+    try {
+      final response = await http.get(Uri.parse('$baseUrl/stories')).timeout(const Duration(seconds: 10));
+      if (response.statusCode == 200) {
+        List jsonResponse = json.decode(response.body);
+        return jsonResponse.map((data) => StoryModel.fromJson(data)).toList();
+      } else {
+        throw Exception('Server error: ${response.statusCode}');
+      }
+    } catch (e) {
+      debugPrint('API Error (getStories): $e');
+      rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>> login(String phone) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/auth/login'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({'phone': phone}),
+    );
+    if (response.statusCode == 200) {
+      final result = json.decode(response.body);
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', result['token']);
+      return result;
+    } else {
+      throw Exception('Login failed');
+    }
+  }
+
+  Future<UserModel> getProfile() async {
+    final token = await _getToken();
+    final response = await http.get(
+      Uri.parse('$baseUrl/auth/profile'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+    if (response.statusCode == 200) {
+      return UserModel.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to load profile');
+    }
+  }
+}
+
