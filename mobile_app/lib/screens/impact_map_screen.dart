@@ -21,17 +21,25 @@ class _ImpactMapScreenState extends State<ImpactMapScreen> with TickerProviderSt
   bool _isProjectVisible = false;
   MapMarkerData? _selectedProject;
   bool _isWebViewInitialized = false;
+  late final bool _useSafeIosMode;
 
   bool get _isSupported => kIsWeb || Platform.isAndroid || Platform.isIOS || Platform.isWindows;
 
   @override
   void initState() {
     super.initState();
+    _useSafeIosMode = !kIsWeb && Platform.isIOS;
+    if (_useSafeIosMode) {
+      // На iOS/iPadOS полностью уходим от WebView для стабильности ревью.
+      _isWebViewInitialized = true;
+      return;
+    }
     _ensureWebViewInitialized();
     _initWebView();
   }
 
   void _ensureWebViewInitialized() {
+    if (_useSafeIosMode) return;
     if (!kIsWeb && WebViewPlatform.instance == null) {
       try {
         if (Platform.isIOS) {
@@ -47,6 +55,7 @@ class _ImpactMapScreenState extends State<ImpactMapScreen> with TickerProviderSt
   }
 
   Future<void> _initWebView() async {
+    if (_useSafeIosMode) return;
     _ensureWebViewInitialized();
     // Для Windows даем больше времени на инициализацию плагина
     await Future.delayed(Duration(milliseconds: Platform.isWindows ? 1000 : 500));
@@ -132,9 +141,7 @@ class _ImpactMapScreenState extends State<ImpactMapScreen> with TickerProviderSt
   }
 
   Widget _buildModelViewer(String src, String alt, bool autoRotate) {
-    // На iOS (особенно Simulator) model-viewer внутри WebView часто дает DownloadFailed.
-    // Для стабильности показываем статичный безопасный рендер.
-    if (!kIsWeb && Platform.isIOS) {
+    if (_useSafeIosMode) {
       return _buildStaticViewer(alt);
     }
 

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import '../providers/collection_provider.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -45,8 +43,10 @@ class ProfileScreen extends StatelessWidget {
             ),
             actions: [
               IconButton(
-                icon: const Icon(Icons.logout_rounded, color: Colors.white),
-                onPressed: () => Navigator.pop(context),
+                icon: const Icon(Icons.login_rounded, color: Colors.white),
+                onPressed: () {
+                  _showLoginDialog(context);
+                },
               ),
             ],
           ),
@@ -76,12 +76,58 @@ class ProfileScreen extends StatelessWidget {
                   _buildHistoryItem('Школа в Мали', '5 000 ₽', '24.01.2026'),
                   _buildHistoryItem('Мечеть в Гвинее', '10 000 ₽', '15.01.2026'),
                   _buildHistoryItem('Обед детям', '2 500 ₽', '10.01.2026'),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: () => _showLoginDialog(context),
+                      icon: const Icon(Icons.login_rounded),
+                      label: const Text('Войти'),
+                    ),
+                  ),
                 ],
               ),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  void _showLoginDialog(BuildContext context) {
+    final phoneController = TextEditingController();
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: const Text('Вход'),
+          content: TextField(
+            controller: phoneController,
+            keyboardType: TextInputType.phone,
+            decoration: const InputDecoration(
+              hintText: '+7 (___) ___-__-__',
+              labelText: 'Телефон',
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: const Text('Отмена'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Вход выполнен (демо-режим)'),
+                  ),
+                );
+              },
+              child: const Text('Войти'),
+            ),
+          ],
+        );
+      },
     );
   }
 
